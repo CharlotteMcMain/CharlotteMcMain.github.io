@@ -1,0 +1,5 @@
+title: Charlotte’s Physics & Engineering
+description: Lessons, ideas, resources
+theme: minima
+plugins:
+  - jekyll-feed
