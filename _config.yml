@@ -1,5 +1,5 @@
 title: Charlotte McMain
 description: Blog
-theme: minima
+theme: cayman
 plugins:
   - jekyll-feed
