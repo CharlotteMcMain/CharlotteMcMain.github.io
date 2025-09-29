@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MathPad Test</title>
+  <link rel="stylesheet" href="assets/css/mathpad.css">
+</head>
+<body style="font-family: sans-serif; padding: 2rem; background:#0f172a; color:#e5e7eb">
+
+  <h2>MathPad Test</h2>
+  <p>Type in the box or click the buttons:</p>
+
+  <input id="eqInput" type="text" placeholder="Type equation…" style="width:100%;max-width:400px;padding:8px">
+  <div id="mathpad-mount"></div>
+
+  <p style="margin-top:1rem">
+    Normalized value: <code id="normalized"></code>
+  </p>
+
+  <script type="module">
+    import { MathPad } from "./assets/js/mathpad.js";
+
+    const eqInput   = document.getElementById("eqInput");
+    const mount     = document.getElementById("mathpad-mount");
+    const normalized = document.getElementById("normalized");
+
+    new MathPad({ mount, input: eqInput, onInsert: update });
+
+    function normalizeEq(str){
+      return (str || "")
+        .replace(/\s+/g,"")
+        .replace(/[·×]/g,"*")
+        .replace(/−/g,"-")
+        .replace(/λ/g,"l")
+        .toLowerCase();
+    }
+
+    function update(){
+      normalized.textContent = normalizeEq(eqInput.value);
+    }
+
+    eqInput.addEventListener("input", update);
+  </script>
+
+</body>
+</html>

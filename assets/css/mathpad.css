@@ -1,0 +1,8 @@
+/* MathPad base styles */
+.mathpad { display: grid; gap: 6px; margin-top: 8px; }
+.mathpad-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.mathpad-key {
+  background: #0b1222; color: #e5e7eb; border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px; padding: 8px 10px; font: inherit; cursor: pointer;
+}
+.mathpad-key:active { transform: translateY(1px); }
