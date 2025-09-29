@@ -1,46 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>MathPad Test</title>
+  <meta charset="UTF-8" />
+  <title>MathPad Live LaTeX</title>
+
+  <!-- Your shared MathPad styles -->
   <link rel="stylesheet" href="assets/css/mathpad.css">
+
+  <!-- KaTeX (fast client-side LaTeX renderer) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+  <style>
+    body { font-family: system-ui, sans-serif; background:#0f172a; color:#e5e7eb; padding:2rem }
+    .box { background:#0b1222; border:1px solid rgba(255,255,255,.15); border-radius:10px; padding:12px 14px; }
+    .render { min-height: 48px; cursor:text; }
+    /* Visually hidden input but still focusable for keyboard */
+    .ghost-input {
+      position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0;
+    }
+  </style>
 </head>
-<body style="font-family: sans-serif; padding: 2rem; background:#0f172a; color:#e5e7eb">
+<body>
+  <h2>MathPad → Live LaTeX (no TeX shown)</h2>
 
-  <h2>MathPad Test</h2>
-  <p>Type in the box or click the buttons:</p>
+  <!-- This is the ONLY thing students see updating -->
+  <div id="render" class="box render" aria-live="polite"></div>
 
-  <input id="eqInput" type="text" placeholder="Type equation…" style="width:100%;max-width:400px;padding:8px">
-  <div id="mathpad-mount"></div>
+  <!-- Hidden text input keeps caret/keyboard behavior simple -->
+  <input id="eqInput" type="text" class="ghost-input" aria-hidden="true">
 
-  <p style="margin-top:1rem">
-    Normalized value: <code id="normalized"></code>
-  </p>
+  <!-- On-screen MathPad -->
+  <div id="mathpad-mount" style="margin-top:10px"></div>
 
   <script type="module">
     import { MathPad } from "./assets/js/mathpad.js";
 
-    const eqInput   = document.getElementById("eqInput");
-    const mount     = document.getElementById("mathpad-mount");
-    const normalized = document.getElementById("normalized");
+    const eqInput  = document.getElementById("eqInput");
+    const renderEl = document.getElementById("render");
+    const mount    = document.getElementById("mathpad-mount");
 
+    // Focus hidden input when user clicks the rendered box (so typing works)
+    renderEl.addEventListener("mousedown", () => { eqInput.focus(); });
+
+    // Build MathPad; every button press calls update()
     new MathPad({ mount, input: eqInput, onInsert: update });
 
-    function normalizeEq(str){
-      return (str || "")
-        .replace(/\s+/g,"")
-        .replace(/[·×]/g,"*")
-        .replace(/−/g,"-")
-        .replace(/λ/g,"l")
-        .toLowerCase();
-    }
-
-    function update(){
-      normalized.textContent = normalizeEq(eqInput.value);
-    }
-
+    // Also update while typing on the keyboard
     eqInput.addEventListener("input", update);
-  </script>
 
+    // Convert the nice symbols they type/click into TeX, then render with KaTeX
+    function toTeX(s){
+      if(!s) return "";
+
+      // 1) Basic cleanup
+      let t = s.replace(/\s+/g, "");
+
+      // 2) Symbols → TeX
+      t = t
+        .replace(/λ/g, "\\lambda")
+        .replace(/Δ/g, "\\Delta")
+        .replace(/π/g, "\\pi")
+        .replace(/Ω/g, "\\Omega")
+        .replace(/μ/g, "\\mu")
+        .replace(/[·×]/g, "\\cdot ")
+        .replace(/−/g, "-")
+        .replace(/√\(/g, "\\sqrt{(")          // √(x) ➜ \sqrt{(x ...}
+        .replace(/√([a-zA-Z0-9]+)/g, "\\sqrt{$1}");
+
+      // 3) Light-touch "one top-level /" ➜ \frac{..}{..}
+      const frac = splitTopLevel(t, "/");
+      if (frac && frac.length === 2) {
+        const [num, den] = frac;
+        t = `\\frac{${wrap(num)}}{${wrap(den)}}`;
+      }
+
+      return t;
+    }
+
+    // Split on delimiter not inside parentheses
+    function splitTopLevel(str, delim){
+      let depth = 0;
+      for(let i=0;i<str.length;i++){
+        const c = str[i];
+        if(c === "(") depth++;
+        else if(c === ")") depth = Math.max(0, depth-1);
+        else if(c === delim && depth === 0){
+          return [str.slice(0,i), str.slice(i+1)];
+        }
+      }
+      return null;
+    }
+
+    // Wrap bare tokens for nicer TeX grouping
+    function wrap(s){
+      if (/[\+\-\*^/]|\\cdot|\\frac/.test(s)) return s;
+      return `{${s}}`;
+    }
+
+    // Render function (no TeX string shown to the student)
+    function update(){
+      const tex = toTeX(eqInput.value);
+      try {
+        renderEl.innerHTML = ""; // clear
+        if (tex) {
+          katex.render(tex, renderEl, { throwOnError:false });
+        } else {
+          renderEl.textContent = ""; // empty state
+        }
+      } catch(e){
+        // Soft-fail on partial input; keep previous good render or show nothing
+      }
+    }
+
+    // Initial
+    eqInput.focus();
+    update();
+  </script>
 </body>
 </html>
