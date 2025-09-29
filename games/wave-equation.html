@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Wave Equation Practice</title>
+  <title>Wave Equation Trainer • Guided</title>
   <style>
     :root {
       --bg: #0f172a;        /* slate-900 */
@@ -14,54 +14,59 @@
       --accent-2: #38bdf8;  /* sky-400 */
       --warning: #f59e0b;   /* amber-500 */
       --error: #ef4444;     /* red-500 */
+      --step: #1f2937;
     }
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; color: var(--ink); background: radial-gradient(1200px 600px at 20% -10%, #1f2937 0, var(--bg) 50%, #0b1022 100%); }
-    .wrap { max-width: 900px; margin: 40px auto; padding: 16px; }
+    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; color: var(--ink); background: radial-gradient(1200px 600px at 20% -10%, #1f2937 0, var(--bg) 50%, #0b1022 100%); }
+    .wrap { max-width: 980px; margin: 30px auto; padding: 16px; }
     .card { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.35); overflow: hidden; }
-    header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-    header h1 { font-size: 1.2rem; margin: 0; letter-spacing: 0.2px; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    header h1 { font-size: 1.1rem; margin: 0; letter-spacing: 0.2px; }
     .pill { font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.18); color: var(--muted); }
 
     .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 12px; padding: 18px; }
-    .panel { grid-column: span 12; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 16px; }
-    @media (min-width: 900px) { .left { grid-column: span 7; } .right { grid-column: span 5; } }
+    .left { grid-column: span 8; }
+    .right { grid-column: span 4; }
+    @media (max-width: 960px){ .left, .right { grid-column: span 12; } }
 
+    .panel { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 14px; }
     .row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 8px 0; }
-    .label { color: var(--muted); font-size: 0.9rem; width: 110px; }
-    .value { font-weight: 600; font-size: 1.05rem; }
-    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-weight: 600; padding: 2px 8px; border-radius: 8px; background: rgba(56,189,248,0.15); border: 1px solid rgba(56,189,248,0.35); color: #e0f2fe; }
+    .small { font-size: .9rem; }
+    .muted { color: var(--muted); }
 
-    input[type="number"], select, button, input[type="text"] { background: #0b1222; color: var(--ink); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 12px; font-size: 1rem; }
-    input[type="number"] { width: 160px; }
-    select { min-width: 110px; }
-    button { cursor: pointer; transition: transform 0.02s ease, background 0.2s ease, border-color 0.2s ease; }
-    button.primary { background: linear-gradient(180deg, rgba(34,197,94,0.15), rgba(34,197,94,0.08)); border-color: rgba(34,197,94,0.45); }
-    button.primary:hover { background: rgba(34,197,94,0.25); }
-    button.ghost { background: transparent; }
+    .question { font-size: 1.05rem; line-height: 1.6; }
+    .token { display: inline-block; padding: 2px 6px; border-radius: 8px; border: 1px dashed rgba(56,189,248,0.35); background: rgba(56,189,248,0.08); cursor: pointer; margin: 0 2px; }
+    .token.have { background: rgba(34,197,94,0.15); border-color: rgba(34,197,94,0.45); }
+    .token.need { background: rgba(245,158,11,0.18); border-color: rgba(245,158,11,0.6); }
 
-    .status { margin-top: 10px; padding: 12px; border-radius: 12px; font-weight: 600; }
+    .steps { display: grid; gap: 10px; margin-top: 8px; }
+    .step { background: var(--step); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 12px; opacity: .45; }
+    .step.active { opacity: 1; box-shadow: 0 0 0 2px rgba(56,189,248,0.2) inset; }
+    .step.done { opacity: .7; }
+
+    select, input[type="number"], input[type="text"], button { background: #0b1222; color: var(--ink); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 8px 10px; font-size: 1rem; }
+    button { cursor: pointer; }
+    .primary { background: linear-gradient(180deg, rgba(34,197,94,0.15), rgba(34,197,94,0.08)); border-color: rgba(34,197,94,0.45); }
+    .ghost { background: transparent; }
+
+    .status { margin-top: 10px; padding: 10px; border-radius: 10px; font-weight: 600; }
     .ok { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.35); }
     .warn { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.35); }
     .bad { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.35); }
 
-    .steps { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 0.95rem; line-height: 1.5; color: #d1d5db; background: #0a0f1d; border-radius: 12px; padding: 12px; border: 1px solid rgba(255,255,255,0.08); overflow: auto; }
-
-    .meta { display: flex; gap: 10px; flex-wrap: wrap; }
-    .meta .box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); padding: 10px 12px; border-radius: 12px; font-size: 0.95rem; }
-    .muted { color: var(--muted); }
-    .small { font-size: 0.88rem; }
-    .center { text-align: center; }
-    .hr { height: 1px; background: rgba(255,255,255,0.08); margin: 14px 0; }
-    .flex-between { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .flex-between { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+    .meta { display: flex; gap: 8px; flex-wrap: wrap; }
+    .box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); padding: 6px 10px; border-radius: 12px; font-size: .95rem; }
+    .hr { height:1px; background: rgba(255,255,255,0.08); margin: 10px 0; }
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New"; padding: 0 6px; border-radius: 6px; border: 1px solid rgba(56,189,248,0.35); }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
       <header>
-        <h1>Wave Equation Practice • <span class="muted">v = f · λ</span></h1>
-        <div class="pill" id="modePill">Randomised Units</div>
+        <h1>Wave Equation Trainer • Guided process</h1>
+        <div class="pill" id="modePill">Randomised sentences</div>
       </header>
 
       <div class="grid">
@@ -70,338 +75,323 @@
             <div class="meta">
               <div class="box">Score: <strong id="score">0</strong></div>
               <div class="box">Streak: <strong id="streak">0</strong></div>
-              <div class="box">Tolerance: <strong id="tol">2%</strong></div>
+              <div class="box">Tol: <strong id="tol">2%</strong></div>
             </div>
             <div class="meta">
-              <label class="small muted">Target sig figs
+              <label class="small muted">Sig figs
                 <select id="sigfigs">
-                  <option value="2">2</option>
-                  <option value="3" selected>3</option>
-                  <option value="4">4</option>
+                  <option>2</option>
+                  <option selected>3</option>
+                  <option>4</option>
                 </select>
               </label>
-              <button class="ghost" id="toggleUnits">Toggle Units: Random</button>
+              <button class="ghost" id="newBtn">New Question</button>
             </div>
           </div>
 
           <div class="hr"></div>
 
-          <div id="given">
-            <!-- Filled by JS -->
+          <div class="question" id="questionText">Question will appear here.</div>
+
+          <div class="steps">
+            <!-- STEP 1 Identify givens/unknown -->
+            <div class="step active" id="step1">
+              <strong>1) Identify givens and what’s required</strong>
+              <p class="small muted">Click the numbers in the sentence to mark what you <em>have</em> and what you <em>need</em>.</p>
+              <div class="row small muted">Legend: <span class="token have">have</span> <span class="token need">need</span></div>
+              <button class="primary" id="s1continue">Confirm</button>
+              <div id="s1fb"></div>
+            </div>
+
+            <!-- STEP 2 Pick base equation -->
+            <div class="step" id="step2">
+              <strong>2) Choose the correct equation</strong>
+              <p class="small">Select the relationship you’ll start from:</p>
+              <label><input type="radio" name="eq" value="v=f*l"> v = f·λ</label>
+              <label><input type="radio" name="eq" value="f=v/l"> f = v / λ</label>
+              <label><input type="radio" name="eq" value="l=v/f"> λ = v / f</label>
+              <div class="row"><button class="primary" id="s2continue">Confirm</button></div>
+              <div id="s2fb"></div>
+            </div>
+
+            <!-- STEP 3 Rearrangement -->
+            <div class="step" id="step3">
+              <strong>3) Rearrangement</strong>
+              <p class="small">Do you need to rearrange to make the unknown the subject?</p>
+              <label><input type="radio" name="rearr" value="v"> Solve for v → v = f·λ</label><br>
+              <label><input type="radio" name="rearr" value="f"> Solve for f → f = v / λ</label><br>
+              <label><input type="radio" name="rearr" value="l"> Solve for λ → λ = v / f</label>
+              <div class="row"><button class="primary" id="s3continue">Confirm</button></div>
+              <div id="s3fb"></div>
+            </div>
+
+            <!-- STEP 4 Unit conversion to SI -->
+            <div class="step" id="step4">
+              <strong>4) Convert givens to SI</strong>
+              <p class="small">Enter the SI values (m/s, Hz, m). We’ll accept ±1% on conversions.</p>
+              <div id="convertFields"></div>
+              <div class="row"><button class="primary" id="s4continue">Confirm</button></div>
+              <div id="s4fb"></div>
+            </div>
+
+            <!-- STEP 5 Calculate numeric answer in SI -->
+            <div class="step" id="step5">
+              <strong>5) Calculate the answer (numeric)</strong>
+              <div class="row">
+                <input type="number" id="calcAns" placeholder="Enter value (SI)" step="any" />
+                <span class="small muted" id="calcUnitLabel">unit</span>
+              </div>
+              <div class="row"><button class="primary" id="s5continue">Check number</button></div>
+              <div id="s5fb"></div>
+            </div>
+
+            <!-- STEP 6 Choose final units for answer -->
+            <div class="step" id="step6">
+              <strong>6) Select units for your final answer</strong>
+              <div class="row">
+                <select id="finalUnit"></select>
+                <button class="primary" id="finishBtn">Finish</button>
+              </div>
+              <div id="s6fb"></div>
+            </div>
           </div>
 
-          <div class="row">
-            <div class="label">Your answer:</div>
-            <input type="number" id="answer" inputmode="decimal" step="any" placeholder="Enter value" />
-            <select id="ansUnit"></select>
-            <button class="primary" id="checkBtn">Check</button>
-            <button class="ghost" id="newBtn">New Question</button>
-          </div>
-
-          <div id="feedback"></div>
-
-          <div class="hr"></div>
-
-          <div class="row">
-            <button class="ghost" id="hintBtn">Hint</button>
-            <button class="ghost" id="solutionBtn">Show solution</button>
-            <button class="ghost" id="copyLinkBtn" title="Copy a shareable link to this question">Share</button>
-          </div>
+          <div id="finalFb" style="margin-top:10px"></div>
         </section>
 
         <aside class="panel right">
-          <div class="small muted">How it works</div>
-          <p class="small">You’ll be shown two of the three quantities. Compute the missing one. Values may use different units. Answers within <strong>±2%</strong> count as correct. Use scientific notation like <span class="kbd">1.2e3</span> if you like.</p>
-          <div class="steps" id="steps">Steps will appear here after you check or reveal the solution.</div>
-          <div class="status warn small" style="margin-top:12px">Tip: change <em>sig figs</em> to train rounding discipline. We still accept ±2%.</div>
+          <div class="small muted">Process</div>
+          <ol class="small">
+            <li>Identify givens and the target by clicking the sentence.</li>
+            <li>Choose the equation.</li>
+            <li>Rearrange for the unknown if needed.</li>
+            <li>Convert all givens to SI.</li>
+            <li>Calculate the numeric value in SI.</li>
+            <li>Choose appropriate units for the final answer.</li>
+          </ol>
           <div class="hr"></div>
-          <div class="small muted">Keyboard</div>
-          <p class="small">Press <span class="kbd">Enter</span> to check, <span class="kbd">N</span> for a new question.</p>
+          <p class="small muted">Keyboard: <span class="kbd">N</span> new question.</p>
         </aside>
       </div>
     </div>
 
-    <p class="center small muted" style="margin-top:16px">Made for physics practice. No tracking, all local.</p>
+    <p class="small muted" style="text-align:center;margin-top:10px">Guided version • No tracking</p>
   </div>
 
   <script>
-    // --- Utility helpers ---
     const rnd = (min, max) => Math.random() * (max - min) + min;
     const choice = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-    // Unit systems
+    // Units options
     const UNITS = {
       v: [ {k:1, label:'m/s'}, {k:1e-3, label:'km/s'}, {k:1e2, label:'cm/s'} ],
       f: [ {k:1, label:'Hz'}, {k:1e3, label:'kHz'}, {k:1e6, label:'MHz'} ],
-      lambda: [ {k:1, label:'m'}, {k:1e-3, label:'mm'}, {k:1e-2, label:'cm'} ]
+      l: [ {k:1, label:'m'}, {k:1e-3, label:'mm'}, {k:1e-2, label:'cm'} ]
     };
 
-    const SYMBOL = { v:'v', f:'f', lambda:'λ' };
-    const NAME = { v:'Wave speed', f:'Frequency', lambda:'Wavelength' };
+    const NAME = { v:'speed', f:'frequency', l:'wavelength' };
 
     const state = {
-      question: null,
-      score: 0,
-      streak: 0,
-      tolPct: 2,
-      sigfigs: 3,
-      unitsRandom: true,
+      score: 0, streak: 0, tolPct: 2, sigfigs: 3,
+      q: null, // current question
+      selections: { have: new Set(), need: null },
+      step: 1
     };
 
     function toSigFigs(x, n){
-      if(!isFinite(x)) return x;
-      if(x === 0) return 0;
+      if(!isFinite(x) || x===0) return x;
       const d = Math.ceil(Math.log10(Math.abs(x)));
-      const power = n - d;
-      const mag = Math.pow(10, power);
+      const power = n - d; const mag = Math.pow(10, power);
       return Math.round(x * mag) / mag;
     }
-
     function fmt(x, n=3){
       const y = toSigFigs(x, n);
-      // Use scientific notation for very big/small
-      if(Math.abs(y) >= 1e4 || Math.abs(y) < 1e-2){
-        return y.toExponential(n-1);
-      }
+      if(Math.abs(y)>=1e4 || Math.abs(y)<1e-2){ return y.toExponential(n-1); }
       return String(y);
     }
 
-    function encodeQuery(obj){
-      return new URLSearchParams(obj).toString();
-    }
+    // Sentence templates
+    // Each template defines which variable is unknown.
+    const templates = [
+      { missing:'v', render:(vals)=>`A wave has a frequency of <span class="token" data-var="f">${fmt(vals.f.show,3)} ${vals.f.unit}</span> and a wavelength of <span class="token" data-var="l">${fmt(vals.l.show,3)} ${vals.l.unit}</span>. What is its speed?` },
+      { missing:'f', render:(vals)=>`A wave travels at <span class="token" data-var="v">${fmt(vals.v.show,3)} ${vals.v.unit}</span> with a wavelength of <span class="token" data-var="l">${fmt(vals.l.show,3)} ${vals.l.unit}</span>. What is its frequency?` },
+      { missing:'l', render:(vals)=>`The frequency of a wave is <span class="token" data-var="f">${fmt(vals.f.show,3)} ${vals.f.unit}</span> and its speed is <span class="token" data-var="v">${fmt(vals.v.show,3)} ${vals.v.unit}</span>. Find the wavelength.` },
+      // Variations
+      { missing:'v', render:(vals)=>`In a certain medium, waves of wavelength <span class="token" data-var="l">${fmt(vals.l.show,3)} ${vals.l.unit}</span> oscillate at <span class="token" data-var="f">${fmt(vals.f.show,3)} ${vals.f.unit}</span>. Determine the wave speed.` },
+      { missing:'f', render:(vals)=>`A ripple moves at <span class="token" data-var="v">${fmt(vals.v.show,3)} ${vals.v.unit}</span>. Its wavelength is <span class="token" data-var="l">${fmt(vals.l.show,3)} ${vals.l.unit}</span>. Calculate its frequency.` },
+      { missing:'l', render:(vals)=>`A wave with speed <span class="token" data-var="v">${fmt(vals.v.show,3)} ${vals.v.unit}</span> has frequency <span class="token" data-var="f">${fmt(vals.f.show,3)} ${vals.f.unit}</span>. What is its wavelength?` },
+    ];
 
-    function decodeQuery(){
-      const p = new URLSearchParams(location.search);
-      const got = Object.fromEntries(p.entries());
-      return Object.keys(got).length? got : null;
-    }
-
-    // Create a new random question (two given, solve for missing)
-    function makeQuestion(seed=null){
-      // Random but controlled ranges for nice numbers
-      // Pick base in SI then convert for display
+    function makeQuestion(){
+      // Generate SI base values
       let f = rnd(30, 3000); // Hz
-      let lambda = rnd(0.05, 12); // m
-      let v = f * lambda; // m/s
+      let l = rnd(0.04, 10); // m
+      let v = f * l; // m/s
 
-      // pick which variable is missing
-      const missing = choice(['v','f','lambda']);
+      // Units for display
+      const pick = (key)=> choice(UNITS[key]);
+      const uf = pick('f'), ul = pick('l'), uv = pick('v');
 
-      // prepare display units (random or SI-only)
-      const pickUnit = (key) => state.unitsRandom ? choice(UNITS[key]) : UNITS[key][0];
-      const u_v = pickUnit('v');
-      const u_f = pickUnit('f');
-      const u_l = pickUnit('lambda');
-
-      // compute display values from SI
-      const show = {
-        v: v / u_v.k,
-        f: f / u_f.k,
-        lambda: lambda / u_l.k,
+      const vals = {
+        f: { si:f, unit: uf.label, k: uf.k, show: f/uf.k },
+        l: { si:l, unit: ul.label, k: ul.k, show: l/ul.k },
+        v: { si:v, unit: uv.label, k: uv.k, show: v/uv.k },
       };
 
-      // build question object
-      return {
-        missing,
-        given: Object.freeze({
-          v: missing==='v'? null : { value: show.v, unit: u_v.label, k: u_v.k },
-          f: missing==='f'? null : { value: show.f, unit: u_f.label, k: u_f.k },
-          lambda: missing==='lambda'? null : { value: show.lambda, unit: u_l.label, k: u_l.k },
-        }),
-        // correct answer in SI
-        answerSI: { v, f, lambda },
-        // what units the user can choose for the answer
-        answerUnits: UNITS[missing]
-      };
+      const t = choice(templates);
+      const missing = t.missing;
+      const givenKeys = ['v','f','l'].filter(k=>k!==missing);
+
+      return { missing, vals, template: t, givenKeys };
     }
 
-    function renderQuestion(q){
-      const givenDiv = document.getElementById('given');
-      const ansUnit = document.getElementById('ansUnit');
-      ansUnit.innerHTML = '';
-      q.answerUnits.forEach(u=>{
-        const opt = document.createElement('option');
-        opt.value = u.label;
-        opt.textContent = u.label;
-        ansUnit.appendChild(opt);
+    function renderQuestion(){
+      const q = state.q;
+      document.getElementById('questionText').innerHTML = q.template.render(q.vals);
+      state.selections.have = new Set();
+      state.selections.need = null;
+      // Bind token clicks
+      document.querySelectorAll('.token').forEach(span=>{
+        span.addEventListener('click', ()=>{
+          const v = span.dataset.var; // 'v','f','l'
+          // Toggle cycle: none → have → need → none
+          if(span.classList.contains('have')){
+            span.classList.remove('have'); span.classList.add('need');
+            state.selections.have.delete(v); state.selections.need = v;
+            // Ensure only one need
+            document.querySelectorAll('.token.need').forEach(el=>{ if(el!==span){ el.classList.remove('need'); } });
+          } else if(span.classList.contains('need')){
+            span.classList.remove('need'); state.selections.need = null;
+          } else {
+            span.classList.add('have'); state.selections.have.add(v);
+          }
+        });
       });
+      // Reset steps
+      setStep(1);
+      document.getElementById('finalFb').innerHTML='';
+    }
 
-      const rows = [];
-      ['v','f','lambda'].forEach(key=>{
-        const g = q.given[key];
-        if(g){
-          rows.push(`<div class="row"><div class="label">${NAME[key]} (${SYMBOL[key]}):</div><div class="value">${fmt(g.value, state.sigfigs)} <span class="muted">${g.unit}</span></div></div>`);
-        } else {
-          rows.push(`<div class="row"><div class="label">Find:</div><div class="value">${NAME[key]} <span class="muted">(${SYMBOL[key]})</span></div></div>`);
-        }
+    function setStep(n){
+      state.step = n;
+      for(let i=1;i<=6;i++){
+        const el = document.getElementById('step'+i);
+        if(i<n) el.className = 'step done';
+        else if(i===n) el.className = 'step active';
+        else el.className = 'step';
+      }
+    }
+
+    function s1Confirm(){
+      const q = state.q;
+      const have = Array.from(state.selections.have);
+      const need = state.selections.need;
+      const s1fb = document.getElementById('s1fb');
+      s1fb.className=''; s1fb.textContent='';
+
+      const needOk = (need===q.missing);
+      const haveOk = (have.sort().join(',') === q.givenKeys.sort().join(','));
+      if(needOk && haveOk){ s1fb.className='status ok'; s1fb.textContent='Correct. Proceed to Step 2.'; setStep(2); }
+      else {
+        const msg=[];
+        if(!haveOk) msg.push('Check which quantities are given.');
+        if(!needOk) msg.push('Mark the correct unknown.');
+        s1fb.className='status bad'; s1fb.textContent=msg.join(' ');
+      }
+    }
+
+    function s2Confirm(){
+      const val = (document.querySelector('input[name="eq"]:checked')||{}).value;
+      const fb = document.getElementById('s2fb'); fb.className=''; fb.textContent='';
+      if(!val){ fb.className='status bad'; fb.textContent='Please choose an equation.'; return; }
+      // Any of the three are acceptable as a starting point, but we nudge towards v=fλ
+      fb.className='status ok'; fb.textContent='Good. Now rearrange to make the unknown the subject.'; setStep(3);
+    }
+
+    function s3Confirm(){
+      const q = state.q; const fb = document.getElementById('s3fb'); fb.className=''; fb.textContent='';
+      const val = (document.querySelector('input[name="rearr"]:checked')||{}).value;
+      if(!val){ fb.className='status bad'; fb.textContent='Choose which variable you are solving for.'; return; }
+      const map = { v:'v', f:'f', l:'l' };
+      if(map[val]===q.missing){ fb.className='status ok'; fb.textContent='Correct rearrangement.'; prepareConversionUI(); setStep(4); }
+      else { fb.className='status bad'; fb.textContent='That rearrangement solves for a different variable.'; }
+    }
+
+    function prepareConversionUI(){
+      const q = state.q; const box = document.getElementById('convertFields');
+      box.innerHTML='';
+      q.givenKeys.forEach(k=>{
+        const v = q.vals[k];
+        const row = document.createElement('div'); row.className='row';
+        row.innerHTML = `<div class="small" style="min-width:140px">${NAME[k]} (${v.unit}) → SI</div>
+          <span class="small muted">${fmt(v.show,3)} ${v.unit}</span>
+          <span style="margin-left:8px">→</span>
+          <input type="number" step="any" placeholder="${NAME[k]} in SI" data-k="${k}" class="convInput" />
+          <span class="small muted">${k==='v'?'m/s':k==='f'?'Hz':'m'}</span>`;
+        box.appendChild(row);
       });
-
-      givenDiv.innerHTML = rows.join('');
-      document.getElementById('steps').textContent = 'Steps will appear here after you check or reveal the solution.';
-      document.getElementById('feedback').innerHTML = '';
-      document.getElementById('answer').value = '';
-      document.getElementById('answer').focus();
-
-      // Update mode pill
-      document.getElementById('modePill').textContent = state.unitsRandom ? 'Randomised Units' : 'SI Units';
     }
 
-    function checkAnswer(){
-      const q = state.question;
-      const ansVal = parseFloat(document.getElementById('answer').value);
-      if(isNaN(ansVal)){
-        showFeedback('Please enter a number for your answer.', 'bad');
-        return;
-      }
-      const unitLabel = document.getElementById('ansUnit').value;
-      const unitObj = q.answerUnits.find(u=>u.label===unitLabel);
-      const k = unitObj.k; // factor from SI to displayed unit
-
-      // correct in chosen unit
-      const correctSI = q.answerSI[q.missing];
-      const correctInUnit = correctSI / k;
-
-      const relErr = Math.abs((ansVal - correctInUnit) / correctInUnit);
-      const ok = relErr <= state.tolPct/100;
-
-      if(ok){
-        state.score += 10;
-        state.streak += 1;
-      } else {
-        state.streak = 0;
-      }
-      updateScore();
-
-      // Build feedback + steps
-      const fb = ok ? `✅ Correct! ${SYMBOL[q.missing]} ≈ ${fmt(correctInUnit, state.sigfigs)} ${unitLabel}`
-                    : `❌ Not quite. Expected about ${fmt(correctInUnit, state.sigfigs)} ${unitLabel} (your error ${(relErr*100).toFixed(1)}%).`;
-      showFeedback(fb, ok? 'ok':'bad');
-
-      const steps = buildSteps(q, unitLabel);
-      document.getElementById('steps').innerHTML = steps;
+    function s4Confirm(){
+      const fb = document.getElementById('s4fb'); fb.className=''; fb.textContent='';
+      const q = state.q; let ok=true; let msgs=[];
+      document.querySelectorAll('.convInput').forEach(inp=>{
+        const k = inp.dataset.k; const val = parseFloat(inp.value);
+        const target = q.vals[k].si; if(!isFinite(val)){ ok=false; msgs.push(`Enter a number for ${NAME[k]}.`); return; }
+        const relErr = Math.abs((val - target)/target);
+        if(relErr>0.01){ ok=false; msgs.push(`${NAME[k]} conversion is off by ${(relErr*100).toFixed(1)}%.`); }
+      });
+      if(ok){ fb.className='status ok'; fb.textContent='Conversions look good.'; setupCalcStep(); setStep(5); }
+      else { fb.className='status bad'; fb.textContent=msgs.join(' '); }
     }
 
-    function buildSteps(q, answerUnitLabel){
-      // Show: convert to SI, formula, substitute, compute, convert to requested unit
-      const g = q.given;
-      const lines = [];
-      lines.push(`Given:`);
-      if(g.v) lines.push(`  v = ${fmt(g.v.value, state.sigfigs)} ${g.v.unit} = ${(g.v.value * g.v.k).toPrecision(state.sigfigs)} m/s`);
-      if(g.f) lines.push(`  f = ${fmt(g.f.value, state.sigfigs)} ${g.f.unit} = ${(g.f.value * g.f.k).toPrecision(state.sigfigs)} Hz`);
-      if(g.lambda) lines.push(`  λ = ${fmt(g.lambda.value, state.sigfigs)} ${g.lambda.unit} = ${(g.lambda.value * g.lambda.k).toPrecision(state.sigfigs)} m`);
-
-      const missing = q.missing;
-      let formula;
-      if(missing==='v') formula = 'v = f · λ';
-      if(missing==='f') formula = 'f = v / λ';
-      if(missing==='lambda') formula = 'λ = v / f';
-      lines.push(`\nFormula: ${formula}`);
-
-      const v = q.answerSI.v;
-      const f = q.answerSI.f;
-      const l = q.answerSI.lambda;
-      if(missing==='v') lines.push(`Substitute: v = ${f.toPrecision(state.sigfigs)} × ${l.toPrecision(state.sigfigs)} = ${(v).toPrecision(state.sigfigs)} m/s`);
-      if(missing==='f') lines.push(`Substitute: f = ${v.toPrecision(state.sigfigs)} / ${l.toPrecision(state.sigfigs)} = ${(f).toPrecision(state.sigfigs)} Hz`);
-      if(missing==='lambda') lines.push(`Substitute: λ = ${v.toPrecision(state.sigfigs)} / ${f.toPrecision(state.sigfigs)} = ${(l).toPrecision(state.sigfigs)} m`);
-
-      const ansUnits = q.answerUnits.find(u=>u.label===answerUnitLabel) || q.answerUnits[0];
-      const target = q.answerSI[missing] / ansUnits.k;
-      lines.push(`Convert to ${answerUnitLabel}: ${(target).toPrecision(state.sigfigs)} ${answerUnitLabel}`);
-
-      return `<pre>${lines.join('\n')}</pre>`;
+    function setupCalcStep(){
+      const q = state.q; const unitLabel = q.missing==='v'? 'm/s' : q.missing==='f'? 'Hz' : 'm';
+      document.getElementById('calcUnitLabel').textContent = unitLabel;
+      const finalUnit = document.getElementById('finalUnit'); finalUnit.innerHTML='';
+      // Populate final unit choices depending on missing
+      const opts = q.missing==='v'? UNITS.v : q.missing==='f'? UNITS.f : UNITS.l;
+      opts.forEach(u=>{ const o=document.createElement('option'); o.value=u.label; o.textContent=u.label; finalUnit.appendChild(o); });
     }
 
-    function showFeedback(text, type){
-      const box = document.getElementById('feedback');
-      box.className = 'status ' + (type || 'ok');
-      box.textContent = text;
+    function s5Confirm(){
+      const fb = document.getElementById('s5fb'); fb.className=''; fb.textContent='';
+      const val = parseFloat(document.getElementById('calcAns').value);
+      if(!isFinite(val)){ fb.className='status bad'; fb.textContent='Please enter a number.'; return; }
+      const correct = state.q.vals[state.q.missing].si;
+      const relErr = Math.abs((val - correct)/correct);
+      if(relErr<=state.tolPct/100){ fb.className='status ok'; fb.textContent='Numeric value looks good in SI.'; setStep(6); }
+      else { fb.className='status bad'; fb.textContent=`That’s off by ${(relErr*100).toFixed(1)}%. Try again.`; }
     }
 
-    function updateScore(){
+    function finish(){
+      const q = state.q; const fb = document.getElementById('s6fb'); fb.className=''; fb.textContent='';
+      const unit = document.getElementById('finalUnit').value;
+      const unitList = q.missing==='v'? UNITS.v : q.missing==='f'? UNITS.f : UNITS.l;
+      const u = unitList.find(x=>x.label===unit);
+      const correctSI = q.vals[q.missing].si; const conv = correctSI / u.k;
+      fb.className='status ok'; fb.textContent=`Final answer: ${fmt(conv, state.sigfigs)} ${unit}.`;
+      // Update score
+      state.score += 10; state.streak += 1;
       document.getElementById('score').textContent = state.score;
       document.getElementById('streak').textContent = state.streak;
+      document.getElementById('finalFb').innerHTML = `<div class="status ok">Well done. You followed the full process.</div>`;
     }
 
-    function newQuestion(fromQuery=null){
-      state.sigfigs = parseInt(document.getElementById('sigfigs').value || '3', 10);
-      const q = fromQuery ? hydrateFromQuery(fromQuery) : makeQuestion();
-      state.question = q;
-      renderQuestion(q);
-      // Update URL with a shareable query
-      const params = {
-        m: q.missing,
-        vv: q.given.v? q.given.v.value.toPrecision(6) : '',
-        vu: q.given.v? q.given.v.unit : '',
-        vk: q.given.v? q.given.v.k : '',
-        fv: q.given.f? q.given.f.value.toPrecision(6) : '',
-        fu: q.given.f? q.given.f.unit : '',
-        fk: q.given.f? q.given.f.k : '',
-        lv: q.given.lambda? q.given.lambda.value.toPrecision(6) : '',
-        lu: q.given.lambda? q.given.lambda.unit : '',
-        lk: q.given.lambda? q.given.lambda.k : '',
-        ur: state.unitsRandom ? 1 : 0,
-      };
-      const query = encodeQuery(params);
-      history.replaceState(null, '', '?' + query);
-    }
+    // Wiring buttons
+    document.getElementById('s1continue').addEventListener('click', s1Confirm);
+    document.getElementById('s2continue').addEventListener('click', s2Confirm);
+    document.getElementById('s3continue').addEventListener('click', s3Confirm);
+    document.getElementById('s4continue').addEventListener('click', s4Confirm);
+    document.getElementById('s5continue').addEventListener('click', s5Confirm);
+    document.getElementById('finishBtn').addEventListener('click', finish);
 
-    function hydrateFromQuery(q){
-      const missing = q.m;
-      const gv = (val, unit, k) => val? { value: parseFloat(val), unit, k: parseFloat(k) } : null;
-      const given = {
-        v: missing==='v'? null : gv(q.vv, q.vu, q.vk),
-        f: missing==='f'? null : gv(q.fv, q.fu, q.fk),
-        lambda: missing==='lambda'? null : gv(q.lv, q.lu, q.lk),
-      };
-      // Recover SI answer
-      const vSI = given.v? given.v.value*given.v.k : null;
-      const fSI = given.f? given.f.value*given.f.k : null;
-      const lSI = given.lambda? given.lambda.value*given.lambda.k : null;
-      const answerSI = { v: vSI ?? fSI*lSI, f: fSI ?? vSI/lSI, lambda: lSI ?? vSI/fSI };
-      return { missing, given, answerSI, answerUnits: UNITS[missing] };
-    }
-
-    // Events
-    document.getElementById('checkBtn').addEventListener('click', checkAnswer);
-    document.getElementById('newBtn').addEventListener('click', ()=> newQuestion());
-    document.getElementById('hintBtn').addEventListener('click', ()=>{
-      const q = state.question; if(!q) return;
-      const hint = q.missing==='v' ? 'Recall: speed = frequency × wavelength' :
-                   q.missing==='f' ? 'Rearrange: f = v / λ' : 'Rearrange: λ = v / f';
-      showFeedback('Hint: ' + hint, 'warn');
-    });
-    document.getElementById('solutionBtn').addEventListener('click', ()=>{
-      const q = state.question; if(!q) return;
-      const unitLabel = document.getElementById('ansUnit').value;
-      const steps = buildSteps(q, unitLabel);
-      document.getElementById('steps').innerHTML = steps;
-    });
-    document.getElementById('toggleUnits').addEventListener('click', ()=>{
-      state.unitsRandom = !state.unitsRandom;
-      document.getElementById('toggleUnits').textContent = 'Toggle Units: ' + (state.unitsRandom? 'Random' : 'SI only');
-      newQuestion();
-    });
-    document.getElementById('sigfigs').addEventListener('change', ()=>{
-      state.sigfigs = parseInt(document.getElementById('sigfigs').value, 10);
-      renderQuestion(state.question);
-    });
-    document.getElementById('copyLinkBtn').addEventListener('click', ()=>{
-      navigator.clipboard.writeText(location.href).then(()=>{
-        showFeedback('Link copied to clipboard. Paste to share this exact question!', 'ok');
-      }).catch(()=>{
-        showFeedback('Could not copy link. You can still share the URL shown in your browser.', 'warn');
-      });
-    });
-
-    document.addEventListener('keydown', (e)=>{
-      if(e.key==='Enter') checkAnswer();
-      if(e.key.toLowerCase()==='n') newQuestion();
-    });
+    document.getElementById('newBtn').addEventListener('click', ()=>{ state.q = makeQuestion(); renderQuestion(); });
+    document.getElementById('sigfigs').addEventListener('change', ()=>{ state.sigfigs = parseInt(document.getElementById('sigfigs').value,10)||3; renderQuestion(); });
+    document.addEventListener('keydown', (e)=>{ if(e.key.toLowerCase()==='n'){ state.q = makeQuestion(); renderQuestion(); } });
 
     // Init
-    const qparams = decodeQuery();
-    if(qparams){ state.unitsRandom = (qparams.ur|0)===1; }
-    newQuestion(qparams);
+    state.q = makeQuestion(); renderQuestion();
   </script>
 </body>
 </html>
