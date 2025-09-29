@@ -10,7 +10,7 @@ Here’s a short trainer for \( v = f \lambda \). Try to compute the missing qua
 You can toggle units, change sig figs, and view worked steps.
 
 <iframe
-  src="{{ site.baseurl }}/games/wave-equation_v1.html"
+  src="{{ site.baseurl }}/games/wave-equation.html"
   title="Wave Equation Practice"
   style="width:100%;max-width:900px;height:640px;border:0;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);">
 </iframe>
