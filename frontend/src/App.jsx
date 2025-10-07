@@ -1,28 +1,24 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// src/App.jsx
+import "./styles/theme.css"; // ensure path is correct
+import WavePractice from "./components/waveEquation";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="p-8 bg-white rounded-2xl shadow">
-        <h1 className="text-3xl font-bold text-blue-600">Hello Tailwind 👋</h1>
-        <p className="text-gray-600 mt-2">
-          Your Physics Practice frontend is working!
-        </p>
-        <button
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </div>
-    </div>
-  )
+    <>
+      <header className="topbar">
+        <div className="container" style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+          <strong style={{ fontSize: "1.1rem" }}>EduLab</strong>
+          <span className="pill info">GCSE</span>
+        </div>
+      </header>
 
+      <main className="content">
+        <div className="container">
+          <section className="card">
+            <WavePractice />
+          </section>
+        </div>
+      </main>
+    </>
+  );
 }
-
-export default App
