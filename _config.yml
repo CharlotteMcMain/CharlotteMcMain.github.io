@@ -1,6 +1,0 @@
-title: Charlotte McMain
-description: Blog
-remote_theme: cayman
-plugins:
-  - jekyll-feed
-  - jekyll-remote-theme
