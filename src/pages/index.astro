@@ -1,27 +1,34 @@
 ---
-import "../styles/globals.css";
+import SiteLayout from "../layouts/SiteLayout.astro";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Charlotte McMain — Science Lab</title>
-  </head>
-  <body>
-    <main class="wrapper">
-      <h1>Welcome to Charlotte’s Science Lab 🧪</h1>
-      <p>Ideas, experiments, and science adventures for curious minds.</p>
-    </main>
-  </body>
-</html>
+<SiteLayout title="Home — Charlotte McMain">
+  <h1>Welcome to Charlotte’s Science Lab 🧪</h1>
+  <p>Ideas, experiments, and resources for curious minds.</p>
 
-<style>
-.wrapper {
-  max-width: 700px;
-  margin: 3rem auto;
-  padding: 0 1rem;
-  line-height: 1.6;
-  font-family: system-ui, sans-serif;
-}
-</style>
+  <section class="cards">
+    <a class="card" href="/physics/">
+      <h2>Physics</h2>
+      <p>Forces, energy, waves—starter tasks & investigations.</p>
+    </a>
+    <a class="card" href="/maths/">
+      <h2>Maths</h2>
+      <p>Number fluency, problem solving, and interactive drills.</p>
+    </a>
+    <a class="card" href="/engineering/">
+      <h2>Engineering</h2>
+      <p>Design challenges, materials, and build logs.</p>
+    </a>
+  </section>
+
+  <style>
+    .cards { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); margin-top: 1.5rem; }
+    .card {
+      border: 1px solid #e5e7eb; border-radius: .75rem; padding: 1rem; text-decoration: none; color: inherit;
+      background: white;
+    }
+    .card:hover { border-color: #cbd5e1; box-shadow: 0 6px 20px rgba(0,0,0,.06); }
+    h2 { margin: 0 0 .25rem 0; font-size: 1.1rem; }
+  </style>
+</SiteLayout>
+

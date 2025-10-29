@@ -1,0 +1,151 @@
+---
+import "../styles/globals.css";
+
+const { title = "Charlotte McMain — Science Lab" } = Astro.props;
+const pathname = Astro.url.pathname;
+
+const links = [
+  { href: "/", label: "Home" },
+  {
+    label: "Subjects",
+    children: [
+      {
+        href: "/physics/",
+        label: "Physics",
+        children: [
+          { href: "/physics/ks3/", label: "KS3" },
+          { href: "/physics/gcse/", label: "GCSE" },
+          { href: "/physics/a-level/", label: "A-Level" },
+        ],
+      },
+      { href: "/maths/", label: "Maths" },
+      { href: "/engineering/", label: "Engineering" },
+    ],
+  },
+  { href: "/science-club/", label: "Science Club" },
+];
+
+function isActive(href) {
+  if (!href) return false;
+  if (href === "/") return pathname === "/";
+  return pathname.startsWith(href);
+}
+
+function parentActive(node) {
+  if (!node) return false;
+  if (node.href && isActive(node.href)) return true;
+  return (node.children || []).some(child => parentActive(child));
+}
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <a class="brand" href="/">CM • Science Lab</a>
+
+      <nav class="nav">
+        {links.map(link => (
+          link.children ? (
+            <div class="nav-group">
+              <span class={`nav-group-title ${parentActive({children: link.children}) ? "active" : ""}`}>
+                {link.label}
+              </span>
+
+              <div class="nav-sub">
+                {link.children.map(child => (
+                  child.children ? (
+                    <div class="nav-branch">
+                      <!-- Physics is now a link -->
+                      <a
+                        href={child.href}
+                        class={`nav-link ${isActive(child.href) ? "active" : ""}`}
+                        aria-current={isActive(child.href) ? "page" : undefined}
+                        >
+                        {child.label}
+                        </a>
+
+
+                      <div class="nav-sub depth-2">
+                        {child.children.map(grand => (
+                          <a
+                            href={grand.href}
+                            class={`nav-link ${isActive(grand.href) ? "active" : ""}`}
+                            aria-current={isActive(grand.href) ? "page" : undefined}
+                          >
+                            {grand.label}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <a
+                      href={child.href}
+                      class={`nav-link ${isActive(child.href) ? "active" : ""}`}
+                      aria-current={isActive(child.href) ? "page" : undefined}
+                    >
+                      {child.label}
+                    </a>
+                  )
+                ))}
+              </div>
+            </div>
+          ) : (
+            <a
+              href={link.href}
+              class={`nav-link ${isActive(link.href) ? "active" : ""}`}
+              aria-current={isActive(link.href) ? "page" : undefined}
+            >
+              {link.label}
+            </a>
+          )
+        ))}
+      </nav>
+    </aside>
+
+    <main class="content">
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style>
+:root{
+  --bg:#0f172a; --bg-hover:#1e293b; --text:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8;
+  --content-bg:#fafafa; --content-text:#111827;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+  color:var(--content-text); background:var(--content-bg);
+  display:grid; grid-template-columns:250px 1fr; min-height:100vh;
+}
+.sidebar{
+  background:var(--bg); color:var(--text); padding:1.5rem 1rem;
+  position:sticky; top:0; height:100vh; border-right:1px solid rgba(255,255,255,.07);
+}
+.brand{display:block; color:var(--text); text-decoration:none; font-weight:700; margin-bottom:1rem}
+
+.nav{display:flex; flex-direction:column; gap:.25rem}
+.nav-link, .nav-branch-link{
+  display:block; padding:.5rem .75rem; border-radius:.5rem; color:var(--text); text-decoration:none; opacity:.9;
+}
+.nav-link:hover, .nav-branch-link:hover{background:var(--bg-hover); opacity:1}
+.nav-link.active, .nav-branch-link.active{background:var(--bg-hover); outline:2px solid var(--accent); color:white}
+
+.nav-group{margin-top:.5rem}
+.nav-group-title{
+  display:block; padding:.4rem .75rem; color:var(--muted); font-size:.85rem; text-transform:uppercase; letter-spacing:.05em;
+}
+.nav-group-title.active{color:white}
+
+.nav-branch{margin-top:.25rem}
+.nav-sub{display:flex; flex-direction:column; gap:.25rem; margin-left:1rem}
+.nav-sub.depth-2{margin-left:1.5rem}
+
+.content{padding:2rem min(6vw,3rem); max-width:1000px; width:100%}
+</style>
