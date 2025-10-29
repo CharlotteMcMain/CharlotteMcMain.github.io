@@ -1,0 +1,54 @@
+/* === Brand palette === */
+:root {
+  /* replace with your hexes */
+  --brand-navy:   #203f9a;   /* dark blue */
+  --brand-navy-dark: #0E1C49;
+  --brand-sky:    #94C2DA;   /* light blue */
+  --brand-steel:  #4E7CB2;   /* mid blue */
+  --brand-pink:   #EB4797;   /* bright pink */
+  --brand-rose:   #E7A0CC;   /* light pink */
+  --brand-sand:   #EFE8E0;   /* off-white / sand */
+  --brand-sand-lighter: color-mix(in srgb, var(--brand-sand) 40%, white);
+
+  /* app surfaces */
+  --bg: var(--brand-navy-dark);
+  --bg-hover: color-mix(in srgb, var(--brand-navy) 85%, white);
+  --text: #eef2f6;           /* sidebar text */
+  --accent: var(--brand-pink);
+  --content-bg: var(--brand-sand-lighter);
+  --content-text: #2A2A3A;
+}
+
+/* === Font faces === */
+@font-face {
+  font-family: "Fredoka";
+  src: url("/fonts/Fredoka-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fredoka";
+  src: url("/fonts/Fredoka-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fredoka";
+  src: url("/fonts/Fredoka-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* === Global resets === */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--content-bg);
+  color: var(--content-text);
+  font-family: "Fredoka", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+img { max-width: 100%; height: auto; }
