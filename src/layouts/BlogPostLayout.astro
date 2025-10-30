@@ -1,0 +1,301 @@
+---
+import SiteLayout from "./SiteLayout.astro";
+
+type Imageish = string | { src: string; width?: number; height?: number };
+
+type Frontmatter = {
+  title?: string;
+  description?: string;
+  pubDate?: string | Date;
+  author?: string;
+  heroImage?: Imageish;
+  hero?: Imageish;
+  cover?: Imageish;
+  heroCaption?: string;
+  caption?: string;
+  tags?: string[] | string;
+  kicker?: string;
+  prevHref?: string;
+  prevTitle?: string;
+  nextHref?: string;
+  nextTitle?: string;
+};
+
+const p = Astro.props as Frontmatter & Record<string, any>;
+const fm = (p.frontmatter ?? {}) as Frontmatter;
+
+const title = p.title ?? fm.title ?? p.frontmatter?.title ?? "Untitled";
+const description = p.description ?? fm.description ?? "";
+const author = p.author ?? fm.author ?? "Charlotte";
+const pubDate =
+  (p.pubDate ?? fm.pubDate)
+    ? new Date(p.pubDate ?? (fm.pubDate as any)).toISOString().slice(0,10)
+    : undefined;
+
+const rawHero: Imageish | undefined =
+  p.heroImage ?? p.hero ?? p.cover ?? fm.heroImage ?? fm.hero ?? fm.cover;
+const heroSrc: string | undefined =
+  typeof rawHero === "string" ? rawHero : rawHero?.src;
+
+const heroCaption = p.heroCaption ?? p.caption ?? fm.heroCaption ?? fm.caption;
+
+const rawTags: string[] | string | undefined = p.tags ?? fm.tags;
+const tags: string[] = Array.isArray(rawTags)
+  ? rawTags
+  : typeof rawTags === "string"
+    ? rawTags.split(",").map(s => s.trim()).filter(Boolean)
+    : [];
+
+const kicker = p.kicker ?? fm.kicker;
+
+const prevHref = p.prevHref ?? fm.prevHref;
+const prevTitle = p.prevTitle ?? fm.prevTitle;
+const nextHref = p.nextHref ?? fm.nextHref;
+const nextTitle = p.nextTitle ?? fm.nextTitle;
+---
+
+<SiteLayout title={title} description={description}>
+  <article id="post" class="post">
+    <header class="post-header">
+      <div class="head-left">
+        {kicker && <div class="kicker">{kicker}</div>}
+
+        <h1 class="post-title">{title}</h1>
+
+        <div class="meta">
+            <div class="meta-left">
+                <span>{author}</span>
+                {pubDate && <>
+                <span class="dot" aria-hidden="true"></span>
+                <time datetime={pubDate}>{pubDate}</time>
+                </>}
+                <span class="dot" aria-hidden="true"></span>
+                <span id="reading-time">—</span>
+            </div>
+
+            <div class="meta-right share-inline">
+                <button id="copy-link" aria-label="Copy post link">Copy</button>
+                <button id="tweet" aria-label="Share to X">Share</button>
+            </div>
+        </div>
+
+
+        {tags.length > 0 && (
+          <ul class="tags">
+            {tags.map((t) => <li class="tag">#{t}</li>)}
+          </ul>
+        )}
+
+      {heroSrc && (
+        <figure class="hero">
+          <img src={heroSrc} alt={title} loading="eager" />
+          {heroCaption && <figcaption>{heroCaption}</figcaption>}
+        </figure>
+      )}
+    </header>
+
+    <!-- No TOC; single content column -->
+    <div class="content">
+      <slot />
+      <div class="divider"></div>
+    </div>
+  </article>
+
+  <!-- Footer fills ONLY the main column -->
+  <footer class="footer-bleed" aria-label="Post footer">
+    <div class="footer-inner">
+      <section class="author">
+        <img src="/author/charlotte.jpeg" alt="Charlotte McMain" />
+        <div>
+          <div class="name">{author}</div>
+          <div class="bio">Engineer-turned-Physics teacher, passionate about making STEM simple ✨ </div>
+        </div>
+      </section>
+
+      {(prevHref || nextHref) && (
+        <nav class="pager" aria-label="Post pagination">
+          {prevHref ? (
+            <a href={prevHref} rel="prev">
+              <small>Previous</small>
+              <div>{prevTitle ?? "Previous post"}</div>
+            </a>
+          ) : <span></span>}
+          {nextHref ? (
+            <a href={nextHref} rel="next" class="next">
+              <small>Next</small>
+              <div>{nextTitle ?? "Next post"}</div>
+            </a>
+          ) : <span></span>}
+        </nav>
+      )}
+    </div>
+  </footer>
+
+  <script>
+    // reading time (~225 wpm)
+    (function () {
+      const el = document.getElementById("post");
+      if (!el) return;
+      const words = el.innerText.trim().split(/\s+/).length;
+      const minutes = Math.max(1, Math.round(words / 225));
+      const rt = document.getElementById("reading-time");
+      if (rt) rt.textContent = `${minutes} min read`;
+    })();
+
+    // share buttons
+    (function () {
+      const copyBtn = document.getElementById("copy-link");
+      const tweetBtn = document.getElementById("tweet");
+      const url = window.location.href;
+      copyBtn?.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(url);
+          copyBtn.textContent = "Copied!";
+          setTimeout(() => (copyBtn.textContent = "Copy link"), 1500);
+        } catch {}
+      });
+      tweetBtn?.addEventListener("click", () => {
+        const text = encodeURIComponent(document.title);
+        const shareUrl = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`;
+        window.open(shareUrl, "_blank");
+      });
+    })();
+  </script>
+
+  <style>
+    :root { --content-max: 1100px; }
+
+    .post {
+      width: 100%;
+      min-width: 300px;
+      max-width: 700px;
+      margin-inline: auto;     /* ← this horizontally centers it */
+    }
+    
+    .post-header {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      padding: 24px;
+      border: 1px solid var(--border, rgba(0,0,0,.1));
+      border-radius: 16px;
+      background: var(--bg-alt, color-mix(in srgb, var(--brand-sand) 70%, white));
+      box-shadow: var(--shadow, 0 6px 24px rgba(0,0,0,.08));
+      margin-bottom: 28px;
+    }
+
+    .kicker { text-transform: uppercase; letter-spacing: .12em; font-weight: 700; color: var(--brand-rose); font-size: .8rem; }
+    .post-title { display:block; font-size: 2.5rem; line-height: 1.15; margin: 6px 0; color: var(--content-text); }
+    .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: var(--muted, #6b7280);
+    font-size: .95rem;
+    margin-top: 8px;
+    }
+
+    .meta-left {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    align-items: center;
+    }
+
+    .meta .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--border, rgba(0,0,0,.15));
+    align-self: center;
+    }
+
+    .meta-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    }
+
+    .share-inline button {
+    border: 1px solid var(--border, rgba(0,0,0,.1));
+    background: var(--bg, #fff);
+    color: var(--text, #2A2A3A);
+    padding: 6px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: .85rem;
+    box-shadow: var(--shadow, 0 4px 16px rgba(0,0,0,.06));
+    transition: transform .1s ease;
+    }
+    .share-inline button:hover {
+    transform: translateY(-1px);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      aspect-ratio: 16/9;
+      background: transparent;   /* remove the grey background */
+      border: none;              /* ensures no border is drawn */
+      box-shadow: none;          /* prevents any faint outline or shadow */
+    }
+    .hero img { width: 100%; height: 100%; object-fit: cover; display: block; border: none;  }
+    .hero figcaption { position: absolute; inset: auto 12px 12px 12px; background: rgba(0,0,0,.45); color: #fff; padding: 8px 10px; border-radius: 10px; font-size: .85rem; }
+
+    .content {
+      min-width: 300px;             /* won’t collapse smaller than 300 px */
+      margin-inline: auto;          /* center text column */
+    }
+    .content h2, .content h3, .content h4 { scroll-margin-top: 90px; margin: 2em 0 .6em; line-height: 1.25; }
+    .content h2 { font-size: clamp(1.6rem, 2.4vw, 2rem); }
+    .content h3 { font-size: clamp(1.25rem, 1.8vw, 1.4rem); }
+
+    .content img { width: 100%; border-radius: 12px; }
+    .content figure { margin: 1.3em 0; }
+    .content figcaption { color: var(--muted, #6b7280); font-size: .9rem; margin-top: .4em; }
+
+    .content blockquote { margin: 1.2em 0; padding: 14px 18px; border-left: 4px solid var(--accent, var(--brand-pink)); background: color-mix(in srgb, var(--accent, var(--brand-pink)) 8%, transparent); border-radius: 8px; }
+
+    pre { overflow: auto; padding: 14px; border: 1px solid var(--border, rgba(0,0,0,.1)); border-radius: 12px; background: #0c0f19; color: #f6f8ff; }
+
+    .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+    list-style: none;      /* removes the dots */
+    padding: 0;            /* removes default UL indentation */
+    margin-left: 0;        /* keeps it aligned */
+    }
+    .tag { font-size: .85rem; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--border, rgba(0,0,0,.1)); background: var(--bg-alt, #f8fafc); }
+
+    .divider { height: 1px; background: var(--border, rgba(0,0,0,.1)); margin: 28px 0; }
+
+    /* Footer fills only the main content area */
+    .footer-bleed {
+      width: 100%;
+      background: transparent;
+      padding: 28px 0;
+    }
+    .footer-inner {
+    width: 100%;
+    min-width: 300px;
+    max-width: 700px;
+    margin-inline: auto;
+    display: grid;
+    gap: 20px;
+    }
+
+    .author { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: center; padding: 14px; border-radius: 16px; background: var(--brand-rose); }
+    .author img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border, rgba(0,0,0,.1)); }
+    .author .name { font-weight: 700; }
+    .author .bio { color: var(--content-text); font-size: .95rem; }
+
+    .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .pager a { display: block; color: var(--content-text); text-decoration: none; padding: 14px; border-radius: 16px; background: var(--brand-sky);}
+    .pager .next { text-align: right; }
+  </style>
+</SiteLayout>

@@ -1,4 +1,5 @@
 ---
+import "../styles/globals.css";
 const { title = "Charlotte McMain — Science Lab" } = Astro.props;
 const pathname = Astro.url.pathname;
 
@@ -33,22 +34,19 @@ function parentActive(node) {
   if (node.href && isActive(node.href)) return true;
   return (node.children || []).some(child => parentActive(child));
 }
+function slugify(s) {
+  return (s || "").toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9\-]/g, "");
+}
 ---
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
-
-    <!-- Load global CSS from /public (guaranteed) -->
-    <link rel="stylesheet" href="/styles/globals.css" />
-
-    <!-- (Optional) Preload main font for snappier first paint -->
-    <!-- <link rel="preload" href="/fonts/CharlotteSans-Regular.ttf" as="font" type="font/ttf" crossorigin> -->
+    <link rel="stylesheet"/>
   </head>
   <body>
     <aside class="sidebar">
-      <!-- Centered logo only -->
       <div class="logo-container">
         <a href="/" aria-label="Charlotte McMain — Home">
           <img
@@ -61,7 +59,6 @@ function parentActive(node) {
         </a>
       </div>
 
-      <!-- Left-aligned nav -->
       <nav class="nav">
         {links.map(link => (
           link.children ? (
@@ -69,10 +66,14 @@ function parentActive(node) {
               <span class={`nav-group-title ${parentActive({ children: link.children }) ? "active" : ""}`}>
                 {link.label}
               </span>
+
               <div class="nav-sub">
-                {link.children.map(child => (
-                  child.children ? (
-                    <div class="nav-branch">
+                {link.children.map(child => {
+                  const hasGrand = !!child.children?.length;
+
+                  /* Simple child (Maths, Engineering) */
+                  if (!hasGrand) {
+                    return (
                       <a
                         href={child.href}
                         class={`nav-link ${isActive(child.href) ? "active" : ""}`}
@@ -80,7 +81,34 @@ function parentActive(node) {
                       >
                         {child.label}
                       </a>
-                      <div class="nav-sub depth-2">
+                    );
+                  }
+
+                  /* Branch with toggle (Physics) */
+                  const open = parentActive(child) || isActive(child.href);
+                  const id = `sub-${slugify(child.label)}`;
+                  return (
+                    <div class={`nav-branch ${open ? "is-open" : ""}`} data-branch={slugify(child.label)}>
+                      <div class={`nav-row ${isActive(child.href) ? "active" : ""}`}>
+                        <a
+                          href={child.href}
+                          class="nav-row-link"
+                          aria-current={isActive(child.href) ? "page" : undefined}
+                        >
+                          {child.label}
+                        </a>
+                        <button
+                          class="nav-row-toggle"
+                          aria-label={`Toggle ${child.label} sub-pages`}
+                          aria-controls={id}
+                          aria-expanded={open ? "true" : "false"}
+                          type="button"
+                        >
+                          <span class="caret" aria-hidden="true"></span>
+                        </button>
+                      </div>
+
+                      <div id={id} class="nav-sub depth-2" hidden={!open}>
                         {child.children.map(grand => (
                           <a
                             href={grand.href}
@@ -92,16 +120,8 @@ function parentActive(node) {
                         ))}
                       </div>
                     </div>
-                  ) : (
-                    <a
-                      href={child.href}
-                      class={`nav-link ${isActive(child.href) ? "active" : ""}`}
-                      aria-current={isActive(child.href) ? "page" : undefined}
-                    >
-                      {child.label}
-                    </a>
-                  )
-                ))}
+                  );
+                })}
               </div>
             </div>
           ) : (
@@ -120,70 +140,132 @@ function parentActive(node) {
     <main class="content">
       <slot />
     </main>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.nav-row-toggle').forEach(btn => {
+          const branch = btn.closest('.nav-branch');
+          const sub = branch?.querySelector('.nav-sub.depth-2');
+          if (!sub) return;
+
+          btn.addEventListener('click', e => {
+            e.stopPropagation(); // so clicking caret doesn't trigger link
+            const open = branch.classList.toggle('is-open');
+            btn.setAttribute('aria-expanded', String(open));
+            sub.hidden = !open;
+          });
+        });
+      });
+    </script>
   </body>
 </html>
 
 <style>
-/* No :root here — globals.css owns colours & fonts */
-
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 
 body {
   margin: 0;
   display: grid;
-  grid-template-columns: 250px 1fr;
+  grid-template-columns: 250px minmax(300px, 1fr);
   min-height: 100vh;
-  /* font + colours come from globals.css */
+}
+@supports (min-height: 100dvh) {
+  body { min-height: 100dvh; }
 }
 
-/* Sidebar shell */
+
+
 .sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 250px;            /* keep in sync with your grid column */
+  height: 100vh;           /* fallback */
+  overflow: auto;          /* scroll inside if the menu is long */
+  z-index: 10;
+
+  /* your existing styles */
   background: var(--bg);
   color: var(--text);
   padding: 1.25rem 1rem;
-  position: sticky;
-  top: 0;
-  height: 100dvh;
   border-right: 1px solid rgba(255,255,255,.08);
-
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 }
+/* Use dynamic viewport height when supported (fixes Safari/Chrome UI issues) */
+@supports (height: 100dvh) {
+  .sidebar { height: 100dvh; }
+}
 
-/* Center the logo only */
+
+/* Logo */
 .logo-container {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 1.25rem;
 }
-.brand-img {
-  display: block;
-  max-width: 180px; /* change size here */
-  width: 100%;
-  height: auto;
-}
+.brand-img { display: block; max-width: 180px; width: 100%; height: auto; }
 
-/* Nav stays left-aligned */
-.nav {
+/* Nav layout */
+.nav { display: flex; flex-direction: column; gap: .25rem; text-align: left; }
+
+/* Shared link style */
+.nav-link,
+.nav-row {
   display: flex;
-  flex-direction: column;
-  gap: .25rem;
-  text-align: left;
-}
-.nav-link {
-  display: block;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1rem;
   padding: .55rem .75rem;
   border-radius: .6rem;
   color: var(--text);
   text-decoration: none;
-  opacity: .95;
+  background: transparent;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background .15s ease;
 }
-.nav-link:hover { background: var(--bg-hover); }
-.nav-link.active { background: var(--brand-navy); color: #fff; }
+.nav-link:hover,
+.nav-row:hover { background: var(--brand-sky); }
+.nav-link.active,
+.nav-row.active { background: var(--brand-steel); color: #fff; }
 
+/* Inside the Physics pill */
+.nav-row-link {
+  flex: 1;
+  color: inherit;
+  text-decoration: none;
+}
+.nav-row-toggle {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: inherit;
+  padding: 0; /* remove extra space */
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-left: .25rem;
+}
+.nav-row-toggle:hover { opacity: 0.85; }
+
+/* Caret shape */
+.caret::before {
+  content: "▸";
+  font-size: .9rem;
+  transition: transform .2s ease, content .2s ease;
+}
+.nav-branch.is-open .caret::before {
+  content: "▾"; /* points down when open */
+}
+
+/* Group titles */
 .nav-group { margin-top: .5rem; }
 .nav-group-title {
   display: block;
@@ -195,14 +277,24 @@ body {
 }
 .nav-group-title.active { color: #fff; }
 
+/* Sub-lists */
 .nav-branch { margin-top: .25rem; }
 .nav-sub { display: flex; flex-direction: column; gap: .25rem; margin-left: 1rem; }
-.nav-sub.depth-2 { margin-left: 1.5rem; }
-
-/* Content area */
-.content {
-  padding: 2rem min(6vw, 3rem);
-  max-width: 1000px;
-  width: 100%;
+.nav-sub.depth-2 {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  margin-left: 1.5rem;
+  margin-top: 0.25rem;
 }
+[hidden] { display: none !important; }
+
+.content {
+  grid-column: 2;    
+  padding: 2.5rem;
+  max-width: none;         /* allows full expansion */
+  width: 100%;
+  min-width: 300px;        /* same minimum width as the grid column */
+}
+
 </style>
