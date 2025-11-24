@@ -1,7 +1,94 @@
 ---
 import SiteLayout from "../../../layouts/SiteLayout.astro";
+
+/** EAGER GLOB: loads modules at build time and returns an object.
+ *  Each value has { frontmatter, url, ... } for MD/MDX pages.
+ */
+const modules = import.meta.glob("./**/*.{md,mdx}", { eager: true });
+
+// Convert object → array of modules
+const allPosts = Object.values(modules);
+
+/** Shape guard (some editors like it explicit) */
+type PostMod = {
+  url?: string;
+  frontmatter?: {
+    title?: string;
+    description?: string;
+    pubDate?: string | Date;
+    heroImage?: string;
+    tags?: string[];
+    draft?: boolean;
+  };
+};
+
+const posts = (allPosts as PostMod[])
+  .filter((p) => !p.frontmatter?.draft)
+  .sort((a, b) => {
+    const da = new Date(a.frontmatter?.pubDate || 0).getTime();
+    const db = new Date(b.frontmatter?.pubDate || 0).getTime();
+    return db - da; // newest first
+  });
 ---
-<SiteLayout title="Physics GCSE — Charlotte McMain">
-  <h1>Physics — GCSE</h1>
-  <p>Exam-style warm-ups, required practicals, and retrieval tasks.</p>
+
+<SiteLayout title="Physics A-Level — Charlotte McMain" description="Exam-style warm-ups, required practicals, and retrieval tasks.">
+  <header class="page-head">
+    <h1>Physics — A-Level</h1>
+    <p>Exam-style warm-ups, required practicals, and retrieval tasks.</p>
+  </header>
+
+  {posts.length === 0 ? (
+    <p>No posts yet. Add an MDX file in <code>src/pages/physics/gcse/</code>.</p>
+  ) : (
+    <section class="grid">
+      {posts.map((post) => {
+        const fm = post.frontmatter ?? {};
+        const title = fm.title ?? "Untitled post";
+        const desc  = fm.description ?? "";
+        const date  = fm.pubDate ?? "";
+        const tags  = fm.tags ?? [];
+        const hero  = fm.heroImage ?? null;
+
+        return (
+          <a href={post.url} class="card" aria-label={title}>
+            {hero && <img src={hero} alt={title} loading="lazy" />}
+            <div class="card-body">
+              <h2 class="card-title">{title}</h2>
+              {date && <time class="card-date" datetime={String(date)}>{String(date)}</time>}
+              {desc && <p class="card-desc">{desc}</p>}
+              {tags.length > 0 && (
+                <ul class="tags">
+                  {tags.map((t) => <li class="tag">#{t}</li>)}
+                </ul>
+              )}
+            </div>
+          </a>
+        );
+      })}
+    </section>
+  )}
+
+  <style>
+    .page-head { margin: 0 0 1rem; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+    @media (min-width: 720px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .card {
+      display: grid; grid-template-rows: auto 1fr;
+      text-decoration: none; color: inherit;
+      border: 1px solid var(--border); border-radius: 16px;
+      background: var(--bg-alt, color-mix(in srgb, var(--brand-sand) 70%, white));
+      box-shadow: var(--shadow, 0 6px 24px rgba(0,0,0,.08));
+      overflow: hidden; transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .card:hover { transform: translateY(-2px); }
+    .card img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid var(--border); display: block; }
+    .card-body { padding: 14px; display: grid; gap: 8px; }
+    .card-title { font-size: 1.1rem; line-height: 1.25; margin: 0; }
+    .card-date { font-size: .9rem; color: var(--muted, #6b7280); }
+    .card-desc { margin: 0; color: var(--content-text, #2A2A3A); }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { font-size: .8rem; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg, #fff); }
+  </style>
 </SiteLayout>
