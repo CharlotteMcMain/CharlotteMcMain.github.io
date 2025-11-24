@@ -1,10 +1,10 @@
 ---
 layout: "../../../layouts/BlogPostLayout.astro"
-title: "Simple Harmonic Motion: 1"
+title: "Circular Motion: 1"
 description: "Introduction to SHM"
 pubDate: "2025-11-24"
 kicker: "Physics • A-Level"
-heroImage: /public/posts/general-img-landscape.png
+heroImage: "/public/posts/circular-motion.png"
 heroCaption: "Introduction to SHM"
 tags: ["kinematics", "exam-technique"]
 prevHref: "/physics/gcse/free-body"
@@ -16,12 +16,14 @@ nextTitle: "Exam Technique: Harvesting easy marks first"
 import CircleMotion from "/public/assets/animations/centripetal-force.svg";
 import { Callout } from "../../../components/Callout.tsx";
 
-<Callout variant="recap" title="Recap">
-Recap: remember Newton's First Law? It says that:
+Recap: remember Newton's First Law?
 
+It says that:
+<Callout variant="theorem" hideTitle>
 'an object will remain at rest or with constant velocity unless acted upon by a resultant force'
-
+</Callout>
 So, when is an object's velocity *not* constant? 
+
 When it's:
 - Speeding up
 - Slowing down
@@ -29,19 +31,21 @@ When it's:
 
 This makes sense because we remember that velocity is a **vector quantity** and, as such, it has both velocity <u>and</u> magnitude.
 So even if our magnitude of velocity stays the same, if we change the direction of our object, we can say the velocity has changed.
-</Callout>
 
 Now, we need to remember another definition:
-<Callout variant="note" title="Key Definitions">
-**acceleration = change in velocity**
+<Callout variant="theorem" hideTitle>
+<div style={{ textAlign: "center" }}>
+    **acceleration = change in velocity**
+</div>
+</Callout>
+
 
 
 And by Newton's 2nd Law:
-
+<Callout variant="theorem" hideTitle>
 'the resultant force acting on an object with a constant mass is directly proportional to its accerlation'
 </Callout>
 
-<Callout variant="theorem" title="Centripetal Force">
 In other words, if our object is experiencing an acceleration, then it must be experiencing a resultant force.
 
 When we move in circular motion, this force is the **centripetal force**.
@@ -49,5 +53,7 @@ When we move in circular motion, this force is the **centripetal force**.
 Now, a common misconception is that this is a *type* of force. But, centripetal is a describing word, and really any of our usual forces could be described as the centripetal force, depending on the situation.
 E.g., if we are running around a running track, once we get to the corner, the force accelerating us is the friction force between our shoes and the floor.
 If we swing a hammer, the centripetal force is the tension in the rope. 
-</Callout>
+
+<div style={{ textAlign: "center" }}>
 <CircleMotion style={{ width: "350px", height: "350px" }} />
+</div>

@@ -68,6 +68,11 @@ img { max-width: 100%; height: auto; }
   font-size: 0.95rem;
 }
 
+/* Remove top margin when no title is present */
+.callout__body > *:first-child {
+  margin-top: 0;
+}
+
 /* Content */
 .callout__body p:last-child {
   margin-bottom: 0;

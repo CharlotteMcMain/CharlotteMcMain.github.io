@@ -5,6 +5,7 @@ type CalloutVariant = "recap" | "theorem" | "note" | "warning";
 interface CalloutProps {
   variant?: CalloutVariant;
   title?: string;
+  hideTitle?: boolean;
   children: ReactNode;
 }
 
@@ -18,13 +19,16 @@ const variantToLabel: Record<CalloutVariant, string> = {
 export function Callout({
   variant = "note",
   title,
+  hideTitle = false,
   children,
 }: CalloutProps) {
   const label = title ?? variantToLabel[variant];
 
   return (
     <div className={`callout callout--${variant}`}>
-      <div className="callout__title">{label}</div>
+      {!hideTitle && (
+        <div className="callout__title">{label}</div>
+      )}
       <div className="callout__body">{children}</div>
     </div>
   );
