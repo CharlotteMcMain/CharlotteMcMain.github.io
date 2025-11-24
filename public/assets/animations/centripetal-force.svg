@@ -1,0 +1,102 @@
+<svg
+  viewBox="0 0 120 120"
+  width="200"
+  height="200"
+  style="font-family: Fredoka, sans-serif;"
+>
+  <defs>
+    <!-- Arrowhead for acceleration (steel) -->
+    <marker id="arrow-acc" markerWidth="6" markerHeight="6"
+            refX="6.5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path
+        d="M0,0 L6,3 L0,6 Z"
+        fill="var(--brand-steel)"
+        stroke="var(--brand-steel)"
+        stroke-width="0"
+      />
+    </marker>
+
+    <!-- Arrowhead for velocity (pink) -->
+    <marker id="arrow-vel" markerWidth="6" markerHeight="6"
+            refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path
+        d="M0,0 L6,3 L0,6 Z"
+        fill="var(--brand-pink)"
+        stroke="var(--brand-pink)"
+        stroke-width="0"
+      />
+    </marker>
+  </defs>
+
+  <!-- Orbit circle -->
+  <circle
+    cx="60" cy="60" r="30"
+    fill="none"
+    stroke="var(--brand-sky)"
+    stroke-dasharray="3 4"
+  />
+
+  <!-- Centre point -->
+  <circle
+    cx="60" cy="60"
+    r="2"
+    fill="var(--brand-navy)"
+  />
+
+  <g transform="translate(60 60)">
+    <g id="motion">
+
+      <!-- Moving dot -->
+      <circle
+        cx="0" cy="-30"
+        r="3"
+        fill="var(--brand-navy)"
+      />
+
+      <!-- Acceleration vector (steel) -->
+      <line
+        x1="0" y1="-30"
+        x2="0" y2="0"
+        stroke="var(--brand-steel)"
+        stroke-width="1.5"
+        marker-end="url(#arrow-acc)"
+      />
+
+      <!-- Velocity vector (pink) -->
+      <line
+        x1="0" y1="-30"
+        x2="25" y2="-30"
+        stroke="var(--brand-pink)"
+        stroke-width="1.5"
+        marker-end="url(#arrow-vel)"
+      />
+
+      <!-- Labels -->
+      <text
+        x="29" y="-30" dy="2"
+        fill="var(--content-text)"
+        font-size="6"
+        font-weight="500"
+        fill="var(--brand-pink)"
+      >v</text>
+
+      <text
+        x="-7" y="-18" dy="2"
+        fill="var(--content-text)"
+        font-size="6"
+        font-weight="500"
+        fill="var(--brand-steel)"
+      >F</text>
+
+      <!-- Rotation Animation -->
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="0 0 0"
+        to="360 0 0"
+        dur="8s"
+        repeatCount="indefinite"
+      />
+    </g>
+  </g>
+</svg>
