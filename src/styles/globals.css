@@ -84,14 +84,17 @@ img { max-width: 100%; height: auto; }
   background: #eff4ff;
 }
 
-.callout--theorem {
+.callout--equation {
   border-left: 4px solid #10b981;
   background: #ecfdf5;
 }
 
-.callout--note {
-  border-left: 4px solid #6b7280;
-  background: #f3f4f6;
+.callout--example {
+  --example-bg: color-mix(in srgb, var(--brand-sand) 60%, #fff7c2);
+  --example-border: color-mix(in srgb, var(--brand-sand) 20%, #e6b800);
+
+  background: var(--example-bg);
+  border-left: 4px solid var(--example-border);
 }
 
 .callout--warning {
@@ -99,3 +102,7 @@ img { max-width: 100%; height: auto; }
   background: #fff7ed;
 }
 
+.katex-display {
+  text-align: center !important;
+  margin: 1em 0;
+}

@@ -4,8 +4,8 @@ title: "The Thermodynamic Scale (or: Why you can't boil an egg on Mt. Everest)"
 description: " "
 pubDate: "2025-11-24"
 kicker: "Physics • A-Level"
-heroImage: "/public/posts/circular-motion.png"
-heroCaption: " "
+heroImage: "/posts/everest.jpg"
+heroCaption: "Photo by Himalayan Wonders"
 tags: ["kinematics", "exam-technique"]
 prevHref: "/physics/gcse/free-body"
 prevTitle: "GCSE Forces: Free-body diagrams that actually make sense"
@@ -15,55 +15,75 @@ nextTitle: "Exam Technique: Harvesting easy marks first"
 
 import CircleMotion from "/public/assets/animations/centripetal-force.svg";
 import { Callout } from "../../../components/Callout.tsx";
+import CtoKPractice from "../../../components/Celsius_to_Kelvin_practice.jsx";
 
-In our day-to-day lives, we mostly talk about temperature in terms of degrees celcius (deg C). This unit was first proposed by Anders Celcius in 1742 and is convient for everyday use as it defines the freezing and boiling points of water, at 0deg and 100deg respectively. 
+
+In our day-to-day lives, we mostly talk about temperature in terms of degrees celcius ($\degree C$). This unit was first proposed by Anders Celcius in 1742 and is convient for everyday use as it defines the freezing and boiling points of water, at $0\degree C$ and $100\degree C$ respectively. 
 
 For most people and in most applications, this is sufficient as it gives a good reference point to be able to compare things. However, a key detail that we usually omit, is the fact that these values are only true at 1 atmosphere of pressure. 
 
-Famously, water on Mt. Everest boils at 68deg (https://www.lpi.usra.edu/education/explore/ice/background/allAboutWater/#:~:text=The%20boiling%20point%20of%20water,F%20(68%C2%B0C).) and as such, you can never cook a whole egg as, whilst the yolk cooks at 65deg, the outer white cooks at 85deg. And in the opposite vein, in a pressure cooker, water actually boils at 120deg. https://www.youtube.com/watch?v=8lyqFkFsH28
+Famously, water on Mt. Everest boils at $68\degree C$[^1] and as such, you can never cook a whole egg as, whilst the yolk cooks at $65\degree C$, the outer white cooks at $85\degree C$. And in the opposite vein, in a pressure cooker, water actually boils at $120\degree C$.
 Remember, water can't get hotter than its boiling point. Once it reaches this point, all of the kinetic energy is being transferred into potential energy to turn the water into steam:
 
+[^1]: https://www.lpi.usra.edu/education/explore/ice/background/allAboutWater/#:~:text=The%20boiling%20point%20of%20water,F%20(68%C2%B0C)
 
+<div style={{ textAlign: "center" }}>
+  <iframe
+    width="560"
+    height="315"
+    src="https://www.youtube.com/embed/8lyqFkFsH28"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  ></iframe>
+</div>
 
-<iframe
-  width="560"
-  height="315"
-  src="https://www.youtube.com/embed/8lyqFkFsH28"
-  title="YouTube video player"
-  frameborder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-></iframe>
 
 As such, you can see how, as we tackle increasingly complex physics and engineering problems, this scale from almost 300 years ago no longer fits our needs. We need a scale that is absolute - i.e., it does not change no matter the atmospheric conditions or properties of the object.
 
 This is where our friend, Lord Kelvin, comes in. He proposed this scale, also known as the Thermodynamic scale, which is based on 2 fixed points which are based on a physical reality:
-- The triple point of water (defined as 273.16K)
+- The triple point of water (defined as $273.16 K$)
+   
    This is a physical condition where solid, liquid, and vapour (different from gas?) states of water all exist in equilibrium.
-- Absolute zero (defined as 0K)
+- Absolute zero (defined as $0 K$)
+   
    This is the lowest possible theoretical temperature where a substance has the minimum internal energy.
 
 As such, no matter the property of any particular substance, we can define its temperature. 
 
-<Callout variant="theorem" hideTitle>
-To convert between Celcius and Kelvin, use:
-T (K) = deg + 273
+<Callout variant="equation" hideTitle>
+To convert a temperature from Celcius to Kelvin, use:
+
+$$ 
+T (K) = \text{degrees}\degree C + 273 
+$$
 </Callout>
-
-Practice:
-
 
 So, this means now, when we talk about temperature, we're really talking about thermal energy, which is a much more useful comparison to make.
-E.g., if I want to know how much more energy my particles have at 50deg than 100deg - currently I couldn't say, as the scale is arbritary.
+
+E.g., if I want to know how much more energy my particles have at $50\degree C$ than $100\degree C$ - currently I couldn't say, as the scale is arbritary.
 But, if I convert to Kelvin, I can calculate this:
 
-<Callout variant="theorem" hideTitle>
-T (K) = deg + 273
+<Callout variant="example" hideTitle>
+$$ 
+T (K) = \text{degrees}\degree C + 273 
+$$
 So, 
-T (K) = 50 + 273 = 323 K
-T (K) = 100 + 273 = 373 K
 
-Therefore, I can conclude that my particles at 100deg have (373/353 = 1.15) ~15% more energy than at 50deg. 
+$$
+T (K) = 50 + 273 = 323 K
+$$
+$$
+T (K) = 100 + 273 = 373 K
+$$
+
+Therefore, I can conclude that my particles at $100\degree C$ have
+$$
+\frac{373}{353} = 1.15
+$$
+~15% more energy than at $50\degree C$. 
 
 </Callout>
 
-
+## Practice:
+<CtoKPractice client:load />
