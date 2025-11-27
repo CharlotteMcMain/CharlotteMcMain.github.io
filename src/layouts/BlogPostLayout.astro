@@ -91,6 +91,14 @@ const nextTitle = p.nextTitle ?? fm.nextTitle;
           </ul>
         )}
 
+        {p.spec && (
+          <div class="spec-points">
+            {p.spec.ocrA && <div><strong>OCR A:</strong> {p.spec.ocrA.join(", ")}</div>}
+            {p.spec.cie && <div><strong>CIE:</strong> {p.spec.cie.join(", ")}</div>}
+            {p.spec.aqa && <div><strong>AQA:</strong> {p.spec.aqa.join(", ")}</div>}
+          </div>
+        )}
+
       {heroSrc && (
         <figure class="hero">
           <img src={heroSrc} alt={title} loading="eager" />
@@ -275,6 +283,14 @@ const nextTitle = p.nextTitle ?? fm.nextTitle;
     margin-left: 0;        /* keeps it aligned */
     }
     .tag { font-size: .85rem; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--border, rgba(0,0,0,.1)); background: var(--bg-alt, #f8fafc); }
+
+    .spec-points {
+      margin-top: 8px;
+      font-size: .9rem;
+      color: var(--muted);
+      display: grid;
+      gap: 4px;
+    }
 
     .divider { height: 1px; background: var(--border, rgba(0,0,0,.1)); margin: 28px 0; }
 

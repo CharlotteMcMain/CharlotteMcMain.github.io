@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 200 200"
+     width="300" height="300"
+     xmlns="http://www.w3.org/2000/svg">
+
+  <style>
+    /* Background */
+    .bg { fill: #02041a; }
+
+    /* Orbits */
+    .orbit-base {
+      fill: none;
+      stroke: #4E7CB2;
+      stroke-width: 1.5;
+      stroke-dasharray: 4 4;
+      opacity: 0.4;
+    }
+
+    .orbit-fill {
+      fill: none;
+      stroke: #E7A0CC;
+      stroke-width: 3;
+      stroke-linecap: round;
+      /* 2πr ≈ 377 for r = 60 */
+      stroke-dasharray: 377;
+      stroke-dashoffset: 377;
+      animation: orbitFill 20s linear infinite;
+    }
+
+    /* Rotating group: moon + radius line */
+    #rotor {
+      transform-origin: 100px 100px;
+      animation: orbitRotation 20s linear infinite;
+    }
+
+    .saturn-point {
+      fill: #EB4797;
+    }
+
+    .moon {
+      fill: #EFE8E0;
+      stroke: #94C2DA;
+      stroke-width: 1.5;
+    }
+
+    .radius-line {
+      stroke: #E7A0CC;
+      stroke-width: 2;
+    }
+
+    .label {
+      fill: #EFE8E0;
+      font-size: 11px;
+      text-anchor: middle;
+    }
+
+    .label-sub {
+      fill: #94C2DA;
+      font-size: 9px;
+      text-anchor: middle;
+    }
+
+    .start-label {
+      fill: #EFE8E0;
+      font-size: 9px;
+    }
+
+    @keyframes orbitRotation {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    @keyframes orbitFill {
+      from { stroke-dashoffset: 377; }
+      to   { stroke-dashoffset: 0; }
+    }
+  </style>
+
+  <!-- Background -->
+  <rect class="bg" x="0" y="0" width="200" height="200" />
+
+  <!-- Base orbit (dashed, full circle) -->
+  <circle class="orbit-base" cx="100" cy="100" r="60" />
+
+  <!-- Filled path showing where the moon has been -->
+  <circle id="orbitFill" class="orbit-fill" cx="100" cy="100" r="60" />
+
+  <!-- Saturn as a point at the centre -->
+  <circle class="saturn-point" cx="100" cy="100" r="3" />
+
+  <!-- Start point on orbit (at 3 o'clock) -->
+  <circle cx="160" cy="100" r="3" fill="#EFE8E0" />
+  <text x="180" y="102" class="start-label" text-anchor="middle">
+    start
+  </text>
+
+  <!-- Rotating group: radius line, r-label, moon -->
+  <g id="rotor">
+    <!-- Radius line -->
+    <line class="radius-line" x1="100" y1="100" x2="160" y2="100" />
+    <!-- r label -->
+    <text x="130" y="94" fill="#E7A0CC" font-size="10" text-anchor="middle">
+      r
+    </text>
+    <!-- Moon -->
+    <circle class="moon" cx="160" cy="100" r="5" />
+  </g>
+
+  <!-- Title -->
+  <text x="100" y="24" class="label">
+    Moon orbiting Saturn
+  </text>
+
+  <!-- Time readout (updated by script) -->
+  <text id="timeLabel" x="100" y="182" class="label">
+    t = 0.0 days
+  </text>
+
+
+  <!-- Simple JS to update the timer -->
+  <script><![CDATA[
+    (function () {
+      var PERIOD_DAYS = 29.3;
+      var ORBIT_MS = 20000; // 20 s = 29.3 days
+      var label = document.getElementById('timeLabel');
+      if (!label) return;
+
+      var start = performance.now();
+      function tick(now) {
+        var elapsed = (now - start) % ORBIT_MS;
+        var frac = elapsed / ORBIT_MS;
+        var days = PERIOD_DAYS * frac;
+        label.textContent = 't = ' + days.toFixed(1) + ' days';
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    })();
+  ]]></script>
+</svg>

@@ -106,3 +106,24 @@ img { max-width: 100%; height: auto; }
   text-align: center !important;
   margin: 1em 0;
 }
+
+.exam-coach-btn {
+  border: 1px solid var(--border, rgba(0, 0, 0, 0.12));
+  background: var(--bg, #ffffff);
+  color: var(--text, #2A2A3A);
+  padding: 6px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  box-shadow: var(--shadow, 0 4px 16px rgba(0, 0, 0, 0.06));
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+}
+
+.exam-coach-btn:hover {
+  transform: translateY(-1px);
+}
+
+.exam-coach-btn.ghost {
+  background: transparent;
+  box-shadow: none;
+}

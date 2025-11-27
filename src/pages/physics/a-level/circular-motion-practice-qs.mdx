@@ -1,0 +1,35 @@
+---
+layout: "../../../layouts/BlogPostLayout.astro"
+title: "Circular Motion Practice Questions"
+description: "Circular Motion Practice Questions"
+pubDate: "2025-11-24"
+kicker: "Physics • A-Level"
+heroImage: "/posts/circular-motion.png"
+heroCaption: "Circular Motion Practice Questions"
+tags: ["kinematics", "exam-technique"]
+prevHref: "/physics/gcse/free-body"
+prevTitle: "GCSE Forces: Free-body diagrams that actually make sense"
+nextHref: "/physics/exams/easy-marks"
+nextTitle: "Exam Technique: Harvesting easy marks first"
+---
+
+import SaturnMoonOrbit from "/public/assets/animations/orbit.svg";
+import { Callout } from "../../../components/Callout.tsx";
+import MathsQuestionCoach from "../../../components/NumericalQuestionCoach";
+
+<MathsQuestionCoach
+  client:load
+  question="A toy car is travelling in a circular path. The toy car completes 18 revolutions in 3s. Calculate the angular velocity in rad $^-1$ of the toy car?"
+  marks={3}
+/>
+
+<div style={{ textAlign: "center" }}>
+  <SaturnMoonOrbit
+    style={{
+      width: "350px",
+      height: "350px",
+      borderRadius: "30px",
+      overflow: "hidden" // REQUIRED to clip the corners
+    }}
+  />
+</div>
