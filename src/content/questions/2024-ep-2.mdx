@@ -1,17 +1,24 @@
 ---
 title: "June 2024 Exploring Physics – Q2"
 questionId: "2024-ep-2"
-tags: ["a-level", "MCQ", "exploring-physics", "particles"]
+board: "OCR A"
+session: "June 2024"
+code: "A-2"
+marks: 1
+tags: ["a-level", "MCQ", "exploring-physics", "SI-units"]
 ---
+
 
 import MultipleChoiceQuestion from "@/components/MultipleChoiceQuestions.tsx";
 
- 
+export const { questionId, board, session, code, marks } = frontmatter;
 
 <MultipleChoiceQuestion
   client:load
-  id="2024-ep-1"
-  stem="A neutrino is a fundamental particle. Which row of the table correctly describes a neutrino?"
+  id={questionId}
+  stem="A neutrino is a fundamental particle.
+  Which row of the table correctly describes a neutrino?
+  i.e., <i>Classification | Force Felt</i>"
   options={[
     { id: "A", label: "hadron | strong nuclear" },
     { id: "B", label: "hadron | weak nuclear" },
@@ -19,5 +26,18 @@ import MultipleChoiceQuestion from "@/components/MultipleChoiceQuestions.tsx";
     { id: "D", label: "lepton | weak nuclear" },
   ]}
   correctId="C"
-  explanation=" "
-/>
+  marks={marks}
+  meta={`${board} · ${session} · ${code}`}
+>
+  Kilowatt-hour ($\text{kWh}$) means: $1000 \text{W} \times 1 \text{hour}$  
+
+  Watts are joules per second: $1 \text{ W} = 1 \dfrac{\text{J}}{\text{s}}$  
+
+  A joule in SI units is:  
+  $1 \text{ J} = 1 \text{ kg }\text{m}^{2}\text{ s}^{-2}$  
+
+  Converting 1 hour into seconds: $1 \text{ hour} = 3600 \text{ s}$  
+
+  Therefore $1\text{ kWh}$ becomes:  
+  $\text{kg m}^2 \text{s}^{-2}$
+</MultipleChoiceQuestion>

@@ -1,23 +1,52 @@
 ---
 title: "June 2024 Exploring Physics – Q5"
 questionId: "2024-ep-5"
-tags: ["a-level", "MCQ", "exploring-physics", "particles"]
+board: "OCR A"
+session: "June 2024"
+code: "A-5"
+marks: 1
+tags: ["a-level", "MCQ", "exploring-physics", "SI-units"]
 ---
 
 import MultipleChoiceQuestion from "@/components/MultipleChoiceQuestions.tsx";
 
- 
+export const { questionId, board, session, code, marks } = frontmatter;
 
 <MultipleChoiceQuestion
   client:load
-  id="2024-ep-5"
-  stem="The image shows a micrometer that is being used to measure the diameter of a wire. The micrometer has a zero error of $+0.07\ \text{mm}$. The measured value of the diameter from the micrometer scale is $2.88\ \text{mm}$. What is the correct area of cross-section of the wire?"
+  id={questionId}
+  stem={`The image shows a micrometer that is being used to measure the diameter of a wire. 
+  The micrometer has a zero error of $+0.07\ \\text{mm}$. 
+  The measured value of the diameter from the micrometer scale is $2.88\ \\text{mm}$. 
+
+  <span class="mcq-image-wrap">
+    <img
+      src="/assets/exam-pictures/june-2024-05-ocrA.webp"
+      alt="Capacitor circuit"
+    />
+  </span>
+  What is the correct area of cross-section of the wire?
+  `}
   options={[
     { id: "A", label: "$2.21\\times10^{-6}\\ \\text{m}^2$" },
     { id: "B", label: "$6.20\\times10^{-6}\\ \\text{m}^2$" },
     { id: "C", label: "$6.51\\times10^{-6}\\ \\text{m}^2$" },
     { id: "D", label: "$6.84\\times10^{-6}\\ \\text{m}^2$" },
   ]}
-  correctId="C"
-  explanation=" "
-/>
+  correctId="B"
+  marks={marks}
+  meta={`${board} · ${session} · ${code}`}
+>
+  
+  The positive zero error means that when it <i>should</i> read 0, it reads $+0.07\text{mm}$.
+
+  Therefore, to get the true diameter, we need to subtract the zero error:
+
+  $$ \text{true diameter} = 2.88-0.07=2.81\ \text{mm}$$
+
+  However, we are asked to give the cross-sectional area of the wire, so we now need to calculate this:
+
+  $$ \text{radius}, r=\frac{d}{2}=\frac{2.81\times10^{-3}}{2}=1.405\times10^{-3}\text{m}$$
+  $$ A = \pi\times r^2=\pi \times (1.405\times10^{-3})^2=6.20\times10^{-6}\text{m}^2$$
+  
+</MultipleChoiceQuestion>

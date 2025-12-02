@@ -1,23 +1,52 @@
 ---
 title: "June 2024 Exploring Physics – Q7"
 questionId: "2024-ep-7"
-tags: ["a-level", "MCQ", "exploring-physics", "particles"]
+board: "OCR A"
+session: "June 2024"
+code: "A-7"
+marks: 1
+tags: ["a-level", "MCQ", "exploring-physics", "SI-units"]
 ---
 
 import MultipleChoiceQuestion from "@/components/MultipleChoiceQuestions.tsx";
 
- 
+export const { questionId, board, session, code, marks } = frontmatter;
 
 <MultipleChoiceQuestion
   client:load
-  id="2024-ep-7"
-  stem="This question is about the rate of decay of a radioactive source. Which of the following statements is/are true? The rate of decay is 1 depedendent on the decay constant. 2 independent of the mass of the source. 3 dependent on time."
+  id={questionId}
+  stem={`This question is about the rate of decay of a radioactive source. 
+  Which of the following statements is/are true? 
+  The rate of decay is:
+  - 1 depedendent on the decay constant. 
+  - 2 independent of the mass of the source. 
+  - 3 dependent on time.
+  `}
   options={[
     { id: "A", label: "1 only" },
     { id: "B", label: "1 and 3" },
     { id: "C", label: "2 only" },
     { id: "D", label: "2 and 3" },
   ]}
-  correctId="C"
-  explanation=" "
-/>
+  correctId="B"
+  marks={marks}
+  meta={`${board} · ${session} · ${code}`}
+>
+  
+  Radiation is governed by the decay equaton:
+  $$\text{Activity}, A = \lambda N$$
+  where:
+  - $A$ = rate of decay (activity)
+  - $\lambda$ = decay constant
+  - $N$ = number of undecayed nuclei
+
+  Going through each statement:
+  1. '<i>Rate of decay is depedendent on the decay constant.</i>'
+  This is true because our equation shows that as lambda changes, A changes.
+
+  2. '<i>Rate of decay is independent of the mass of the source.</i>'
+  The mass determines how many nuclei $N$ that you start with, so if $m$ changes, $N$ changes and therefore $A$ changes.
+
+  3. '<i>Rate of decay is dependent on time.</i>'
+  $$A(t)=A_0e^{-\lambda t}$$
+</MultipleChoiceQuestion>

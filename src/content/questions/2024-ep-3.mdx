@@ -1,16 +1,21 @@
 ---
 title: "June 2024 Exploring Physics – Q3"
 questionId: "2024-ep-3"
-tags: ["a-level", "MCQ", "exploring-physics", "particles"]
+board: "OCR A"
+session: "June 2024"
+code: "A-3"
+marks: 1
+tags: ["a-level", "MCQ", "exploring-physics", "SI-units"]
 ---
+
 
 import MultipleChoiceQuestion from "@/components/MultipleChoiceQuestions.tsx";
 
- 
+export const { questionId, board, session, code, marks } = frontmatter;
 
 <MultipleChoiceQuestion
   client:load
-  id="2024-ep-3"
+  id={questionId}
   stem="Which one of these non-invasive medical scans <b>not</b> expose the patient to ionising radiation?"
   options={[
     { id: "A", label: "CAT" },
@@ -19,5 +24,18 @@ import MultipleChoiceQuestion from "@/components/MultipleChoiceQuestions.tsx";
     { id: "D", label: "X-ray" },
   ]}
   correctId="C"
-  explanation=" "
-/>
+  marks={marks}
+  meta={`${board} · ${session} · ${code}`}
+>
+  Kilowatt-hour ($\text{kWh}$) means: $1000 \text{W} \times 1 \text{hour}$  
+
+  Watts are joules per second: $1 \text{ W} = 1 \dfrac{\text{J}}{\text{s}}$  
+
+  A joule in SI units is:  
+  $1 \text{ J} = 1 \text{ kg }\text{m}^{2}\text{ s}^{-2}$  
+
+  Converting 1 hour into seconds: $1 \text{ hour} = 3600 \text{ s}$  
+
+  Therefore $1\text{ kWh}$ becomes:  
+  $\text{kg m}^2 \text{s}^{-2}$
+</MultipleChoiceQuestion>

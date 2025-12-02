@@ -3,43 +3,89 @@ import katex from "katex";
 import "katex/dist/katex.min.css";
 
 type Option = {
-  id: string;   // "A", "B", "C"...
-  label: string; // we'll allow LaTeX in here
+  id: string;
+  label: string; // supports LaTeX + simple HTML
 };
 
 type MultipleChoiceQuestionProps = {
   id: string;
-  stem: string;
+  stem: string;   // supports LaTeX + simple HTML
   options: Option[];
   correctId: string;
-  explanation?: string;
+  marks?: number;
+  meta?: string;              // e.g. "OCR A · June 2024 · A-4"
+  children?: React.ReactNode; // explanation content
 };
 
-function renderLabel(label: string): React.ReactNode {
-  const trimmed = label.trim();
+// Render plain text, allowing basic HTML (including <img>) and line breaks
+function renderPlainHtml(text: string): React.ReactNode {
+  if (!text) return null;
+  // If you want \n to act as line breaks, uncomment the next line:
+  // text = text.replace(/\n/g, "<br />");
+  return <span dangerouslySetInnerHTML={{ __html: text }} />;
+}
 
-  const isDisplay = trimmed.startsWith("$$") && trimmed.endsWith("$$");
-  const isInline =
-    !isDisplay && trimmed.startsWith("$") && trimmed.endsWith("$");
-
-  if (!isInline && !isDisplay) {
-    // just plain text, no LaTeX delimiters
-    return label;
+// Render inline or display LaTeX segments inside normal text
+function renderWithKaTeX(text: string): React.ReactNode {
+  if (!text.includes("$")) {
+    // no math at all – just render HTML
+    return renderPlainHtml(text);
   }
 
-  const latex = trimmed.slice(isDisplay ? 2 : 1, isDisplay ? -2 : -1);
+  const parts: React.ReactNode[] = [];
+  const regex = /(\${1,2})([^$]+?)\1/g; // $...$ or $$...$$
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  let key = 0;
 
-  try {
-    const html = katex.renderToString(latex, {
-      throwOnError: false,
-      displayMode: isDisplay,
-    });
+  while ((match = regex.exec(text)) !== null) {
+    const [fullMatch, delimiter, content] = match;
+    const matchIndex = match.index;
 
-    return <span dangerouslySetInnerHTML={{ __html: html }} />;
-  } catch (e) {
-    // if KaTeX chokes for some reason, fall back to the raw text
-    return label;
+    // Plain HTML before this math segment
+    if (matchIndex > lastIndex) {
+      const plain = text.slice(lastIndex, matchIndex);
+      parts.push(
+        <React.Fragment key={key++}>
+          {renderPlainHtml(plain)}
+        </React.Fragment>
+      );
+    }
+
+    const isDisplay = delimiter === "$$";
+
+    try {
+      const html = katex.renderToString(content, {
+        throwOnError: false,
+        displayMode: isDisplay,
+      });
+
+      parts.push(
+        <span
+          key={key++}
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      );
+    } catch {
+      parts.push(
+        <React.Fragment key={key++}>{fullMatch}</React.Fragment>
+      );
+    }
+
+    lastIndex = matchIndex + fullMatch.length;
   }
+
+  // Any remaining plain HTML after the last math segment
+  if (lastIndex < text.length) {
+    const plain = text.slice(lastIndex);
+    parts.push(
+      <React.Fragment key={key++}>
+        {renderPlainHtml(plain)}
+      </React.Fragment>
+    );
+  }
+
+  return <>{parts}</>;
 }
 
 const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
@@ -47,10 +93,13 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
   stem,
   options,
   correctId,
-  explanation,
+  marks,
+  meta,
+  children,
 }) => {
   const [selected, setSelected] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [showExplanation, setShowExplanation] = useState(false);
 
   const isCorrect = submitted && selected === correctId;
 
@@ -60,21 +109,28 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
     setSubmitted(true);
   }
 
-  function handleChange(optionId: string) {
-    setSelected(optionId);
-    setSubmitted(false);
-  }
-
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="mcq"
-      aria-labelledby={`${id}-stem`}
-    >
-      <p id={`${id}-stem`} className="mcq-stem">
-        {stem}
-      </p>
+    <form onSubmit={handleSubmit} className="mcq" aria-labelledby={`${id}-stem`}>
+      {/* Meta + marks row */}
+      {(meta || typeof marks === "number") && (
+        <div className="mcq-meta-row">
+          <div className="mcq-meta">{meta}</div>
+          {typeof marks === "number" && (
+            <div className="mcq-marks">
+              {marks} mark{marks === 1 ? "" : "s"}
+            </div>
+          )}
+        </div>
+      )}
 
+      {/* Stem */}
+      <div className="mcq-header">
+        <div id={`${id}-stem`} className="mcq-stem">
+          {renderWithKaTeX(stem)}
+        </div>
+      </div>
+
+      {/* Options */}
       <div className="mcq-options">
         {options.map((opt) => {
           const isSelected = selected === opt.id;
@@ -93,17 +149,21 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
               ]
                 .filter(Boolean)
                 .join(" ")}
-              onClick={() => handleChange(opt.id)}
+              onClick={() => {
+                setSelected(opt.id);
+                setSubmitted(false);
+              }}
             >
               <span className="mcq-option-label">{opt.id}.</span>
               <span className="mcq-option-text">
-                {renderLabel(opt.label)}
+                {renderWithKaTeX(opt.label)}
               </span>
             </button>
           );
         })}
       </div>
 
+      {/* Check answer */}
       <div className="mcq-actions">
         <button
           type="submit"
@@ -112,6 +172,7 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
         >
           {submitted ? "Marked" : "Check answer"}
         </button>
+
         {submitted && (
           <span
             className={`mcq-result ${
@@ -123,10 +184,22 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
         )}
       </div>
 
-      {submitted && explanation && (
-        <div className="mcq-explanation">
-          <strong>Explanation: </strong>
-          {explanation}
+      {/* Explanation toggle */}
+      {children && (
+        <div className="mcq-explanation-wrapper">
+          <button
+            type="button"
+            className="mcq-explanation-button"
+            onClick={() => setShowExplanation((s) => !s)}
+          >
+            {showExplanation ? "Hide explanation ▲" : "Show explanation ▼"}
+          </button>
+
+          {showExplanation && (
+            <div className="mcq-explanation">
+              {children}
+            </div>
+          )}
         </div>
       )}
     </form>

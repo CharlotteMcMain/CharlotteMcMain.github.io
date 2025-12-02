@@ -1,33 +1,41 @@
 ---
 title: "June 2024 Exploring Physics – Q1"
 questionId: "2024-ep-1"
+board: "OCR A"
+session: "June 2024"
+code: "A-1"
+marks: 1
 tags: ["a-level", "MCQ", "exploring-physics", "SI-units"]
 ---
 
+
 import MultipleChoiceQuestion from "@/components/MultipleChoiceQuestions.tsx";
+
+export const { questionId, board, session, code, marks } = frontmatter;
 
 <MultipleChoiceQuestion
   client:load
-  id="2024-ep-1"
-  stem="What are the base units of a kilowatt-hour?"
+  id={questionId}
+  stem={`What are the base units of a kilowatt-hour?`}
   options={[
     { id: "A", label: "$\\text{J}$" },
-    { id: "B", label: "$\\text{kg } \\text{m}^2 \\text{ s}^{-1}$" },
-    { id: "C", label: "$\\text{kg } \\text{m}^2 \\text{ s}^{-2}$" },
+    { id: "B", label: "$\\text{kg m}^2 \\text{s}^{-1}$" },
+    { id: "C", label: "$\\text{kg m}^2 \\text{s}^{-2}$" },
     { id: "D", label: "$\\text{W s}$" },
   ]}
   correctId="C"
-  explanation=" "
-/>
+  marks={marks}
+  meta={`${board} · ${session} · ${code}`}
+>
+  Kilowatt-hour ($\text{kWh}$) means: $1000 \text{W} \times 1 \text{hour}$  
 
-Kilowatt-hour ($\text{kWh}$) means: $1000 \text{W} \times 1 \text{hour}$
+  Watts are joules per second: $1 \text{ W} = 1 \dfrac{\text{J}}{\text{s}}$  
 
-Watts are joules per second: $1 \text{ W} = 1 \frac{\text{J}}{\text{s}}$
+  A joule in SI units is:  
+  $1 \text{ J} = 1 \text{ kg }\text{m}^{2}\text{ s}^{-2}$  
 
-A joule in SI units is given by:
-$1 \text{ J} = 1 \text{ kg }\text{m}^{2}\text{ s}^{-3}$
+  Converting 1 hour into seconds: $1 \text{ hour} = 3600 \text{ s}$  
 
-Converting 1 hour into seconds: $1 \text{ hour} = 3600 \text{ s}$
-
-Combining these: $1 \text{ kWh} = 1000 \times (\text{ kg }\text{m}^{2}\text{ s}^{-3}) \times (3600 \text{ s})$
-Gives: $\text{ kg }\text{m}^{2}\text{ s}^{-2}$
+  Therefore $1\text{ kWh}$ becomes:  
+  $\text{kg m}^2 \text{s}^{-2}$
+</MultipleChoiceQuestion>

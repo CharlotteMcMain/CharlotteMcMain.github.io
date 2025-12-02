@@ -28,33 +28,42 @@ import EP_Q12 from "@/content/questions/2024-ep-12.mdx";
 import EP_Q13 from "@/content/questions/2024-ep-13.mdx";
 import EP_Q14 from "@/content/questions/2024-ep-14.mdx";
 import EP_Q15 from "@/content/questions/2024-ep-15.mdx";
+import EP_Q16 from "@/content/questions/2024-ep-16.mdx";
+import PlotPointsQuestion from "@/components/PlotPointsQuestion.tsx";
 
+## Section A
 <EP_Q1 />
-
-<EP_Q2 />
-
+<EP_Q2 /> 
 <EP_Q3 />
-
 <EP_Q4 />
-
 <EP_Q5 />
-
 <EP_Q6 />
-
 <EP_Q7 />
-
 <EP_Q8 />
-
 <EP_Q9 />
-
 <EP_Q10 />
-
 <EP_Q11 />
-
 <EP_Q12 />
-
 <EP_Q13 />
-
 <EP_Q14 />
-
 <EP_Q15 />
+
+## Section B
+<EP_Q16 />
+
+<PlotPointsQuestion
+  client:load
+  id="2024-ep-16-bi"
+  questionText="Use this graph to answer part (b)(i). Click to add/remove points."
+  xMin={0}
+  xMax={100}
+  xStep={10}
+  yMin={0}
+  yMax={12}
+  yStep={2}
+  correctPoints={[
+    { x: 40, y: 3 },
+    { x: 50, y: 4 },
+    // etc – use whatever the exam mark scheme uses
+  ]}
+/>

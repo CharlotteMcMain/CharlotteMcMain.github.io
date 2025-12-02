@@ -1,23 +1,55 @@
 ---
 title: "June 2024 Exploring Physics – Q6"
 questionId: "2024-ep-6"
-tags: ["a-level", "MCQ", "exploring-physics", "particles"]
+board: "OCR A"
+session: "June 2024"
+code: "A-6"
+marks: 1
+tags: ["a-level", "MCQ", "exploring-physics", "SI-units"]
 ---
 
 import MultipleChoiceQuestion from "@/components/MultipleChoiceQuestions.tsx";
 
- 
+export const { questionId, board, session, code, marks } = frontmatter;
 
 <MultipleChoiceQuestion
   client:load
-  id="2024-ep-6"
-  stem="The image shows a display of an oscilloscope which is measuring an alternating voltage. The time base is set at $0.1\ \text{s}/\text{division}$. The voltage scale (y-sensitivity) is set at $0.5\ \text{V}/\text{division}$. Which row of the table shows the correct amplitude and correct frequency?"
+  id={questionId}
+  stem={`The image shows a display of an oscilloscope which is measuring an alternating voltage. 
+  
+  The time base is set at $0.1\ \\text{s}/\\text{division}$. 
+  
+  The voltage scale (y-sensitivity) is set at $0.5\ \\text{V}/\\text{division}$. 
+  
+  Which row of the table shows the correct amplitude (/V) and correct frequency (/Hz)?
+
+  <span class="mcq-image-wrap">
+    <img
+      src="/assets/exam-pictures/june-2024-06-ocrA.webp"
+      alt="Capacitor circuit"
+    />
+  </span>
+  `}
   options={[
     { id: "A", label: "$1.75$ | $0.4$" },
     { id: "B", label: "$1.75$ | $2.5$" },
     { id: "C", label: "$3.50$ | $0.4$" },
     { id: "D", label: "$3.50$ | $2.5$" },
   ]}
-  correctId="C"
-  explanation=" "
-/>
+  correctId="B"
+  marks={marks}
+  meta={`${board} · ${session} · ${code}`}
+>
+  
+  **Amplitude** = 
+
+  1. Count the number of squares for the half the wave: 3.5 squares.
+
+  2. Each square is worth 0.5V therefore, the amplitude is no. squares times 0.5V = $3.5\times0.5=1.75V
+  
+  **Frequency** = 
+
+  We can use the relationship: $f=\frac{1}{T}$, where $\text{T}$ is the period of the wave (the time taken to complete 1 cycle). 
+  Measuring this, we get 1 wave is 4 squares. Each square is worth 0.1s therefore $T=4\times0.1=0.4s$. Therefore, $f=\frac{1}{0.4}=2.5\text{Hz}$.
+
+</MultipleChoiceQuestion>

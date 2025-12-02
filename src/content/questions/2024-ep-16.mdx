@@ -1,0 +1,85 @@
+---
+title: "June 2024 – Exploring Physics Q16"
+questionId: "2024-ep-16"
+tags: ["a-level", "long-answer", "graphs"]
+---
+
+import LongAnswerQuestion from "@/components/LongAnswerQuestions.tsx";
+
+<LongAnswerQuestion
+  client:load
+  id="2024-ep-16"
+  meta="OCR A · June 2024 · Q16"
+  stem={`Thermistors are circuit components whose resistance varies with temperature.
+
+There are two major types; negative temperature coefficient (NTC) thermistors, whose resistance
+decreases with increasing temperature and positive temperature coefficient (PTC) thermistors,
+whose resistance increases with increasing temperature.
+
+A student is investigating how the resistance of a thermistor varies with temperature by
+measuring current and voltage. The thermistor is placed in a water bath and the temperature of
+the water measured using a thermometer.
+
+The diagram below shows how the student set up the experiment (water bath not shown). The
+circuit has been set up <b>incorrectly</b>.
+
+<span class="mcq-image-wrap">
+  <img
+    src="/assets/exam-pictures/june-2024-16a-ocrA.webp"
+    alt="Thermistor circuit"
+  />
+</span>
+`}
+  parts={[
+    {
+      id: "a",
+      label: "a",
+      text: "Describe how the student should change the circuit.",
+      marks: 1,
+      explanation: "The voltmeter needs to be connected in parallel with the thermistor.",
+    },
+    {
+      id: "b",
+      label: "b",
+      text: "The circuit was corrected and then used to collect data. The table shows data collected from the investigation.",
+      marks: 0,
+      subparts: [
+        {
+          id: "bi",
+          label: "i",
+          text: `The axes below show a plot of current against temperature. The first four points from the table have been plotted. Plot the remaining points.`,
+          marks: 2,
+          graph: {
+            xMin: 20,
+            xMax: 100,
+            xStep: 10,
+            yMin: 0,
+            yMax: 12,
+            yStep: 2,
+            xLabel: "Temperature / °C",
+            yLabel: "Current / mA",
+            helperText: "Click on the grid to add or remove points. Then press “Check points”.",
+            correctPoints: [
+              { x: 40, y: 3 },
+              { x: 50, y: 4 },
+              { x: 60, y: 6 },
+              { x: 70, y: 8 },
+              { x: 80, y: 10 },
+              // whatever the real mark-scheme points are
+            ],
+            tolerance: 0, // or 1 if you want to be forgiving in units
+            showBestFit: false, // later we can use this
+          },
+          explanation: "All remaining points should lie on the smooth curve following the trend of the first four.",
+        },
+        {
+          id: "bii",
+          label: "ii",
+          text: "Explain the shape of the graph.",
+          marks: 2,
+          explanation: "As temperature increases, the resistance of the NTC thermistor decreases, so the current increases non-linearly.",
+        },
+      ],
+    },
+  ]}
+/>
