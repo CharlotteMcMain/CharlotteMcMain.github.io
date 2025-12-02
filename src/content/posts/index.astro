@@ -1,0 +1,46 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+---
+
+<SiteLayout title="Home — Charlotte McMain">
+  <header class="home-hero">
+    <img src="/brand/logo-long.svg" alt="Charlotte McMain — Science Lab" class="home-logo" width="720" height="160" />
+    <p class="tagline">Tagline.</p>
+  </header>
+  <h1>Header🧪</h1>
+  <p>Introduction</p>
+
+  <section class="cards">
+    <a class="card" href="/physics/">
+      <h2>Physics</h2>
+      <p>Description</p>
+    </a>
+    <a class="card" href="/maths/">
+      <h2>Maths</h2>
+      <p>Description</p>
+    </a>
+    <a class="card" href="/engineering/">
+      <h2>Engineering</h2>
+      <p>Description</p>
+    </a>
+  </section>
+
+  <style>
+    .cards { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); margin-top: 1.5rem; }
+    .card {
+      border: 1px solid #e5e7eb; border-radius: .75rem; padding: 1rem; text-decoration: none; color: inherit;
+      background: white;
+    }
+    .card:hover { border-color: #cbd5e1; box-shadow: 0 6px 20px rgba(0,0,0,.06); }
+    h2 { margin: 0 0 .25rem 0; font-size: 1.1rem; }
+	.home-hero {
+	display: grid;
+	justify-items: start;
+	gap: .75rem;
+	margin-bottom: 1.5rem;
+	}
+	.home-logo { max-width: min(90%, 520px); height: auto; }
+	.tagline { color: #475569; margin: 0; }
+  </style>
+</SiteLayout>
+

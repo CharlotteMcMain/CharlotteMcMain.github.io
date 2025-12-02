@@ -1,5 +1,6 @@
 ---
 import SiteLayout from "./SiteLayout.astro";
+import { getEntry, type CollectionEntry } from "astro:content";
 
 type Imageish = string | { src: string; width?: number; height?: number };
 
@@ -19,7 +20,10 @@ type Frontmatter = {
   prevTitle?: string;
   nextHref?: string;
   nextTitle?: string;
+  relatedQuestions?: string[];
 };
+
+type QuestionEntry = CollectionEntry<"questions">;
 
 const p = Astro.props as Frontmatter & Record<string, any>;
 const fm = (p.frontmatter ?? {}) as Frontmatter;
@@ -52,6 +56,26 @@ const prevHref = p.prevHref ?? fm.prevHref;
 const prevTitle = p.prevTitle ?? fm.prevTitle;
 const nextHref = p.nextHref ?? fm.nextHref;
 const nextTitle = p.nextTitle ?? fm.nextTitle;
+
+// array of slugs, e.g. ["2021-p1-q3", "siunits-basic-01"]
+const relatedSlugs: string[] =
+  (p.relatedQuestions ?? fm.relatedQuestions ?? []) as string[];
+
+const relatedQuestionEntries = (await Promise.all(
+  relatedSlugs.map((slug) => getEntry("questions", slug))
+)) as (QuestionEntry | undefined)[];
+
+// filter out any undefined, just in case
+const renderedQuestions = await Promise.all(
+  relatedQuestionEntries
+    .filter((q): q is QuestionEntry => !!q)
+    .map(async (q) => {
+      const { Content } = await q.render();
+      return { data: q.data, Content };
+    })
+);
+
+
 ---
 
 <SiteLayout title={title} description={description}>
@@ -110,8 +134,24 @@ const nextTitle = p.nextTitle ?? fm.nextTitle;
     <!-- No TOC; single content column -->
     <div class="content">
       <slot />
+
+      {renderedQuestions.length > 0 && (
+        <section class="related-questions">
+          <h2>Try these questions</h2>
+          <div class="question-list">
+            {renderedQuestions.map((q) => (
+              <article class="question-card">
+                <h3>{q.data.title}</h3>
+                <q.Content />
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
       <div class="divider"></div>
     </div>
+
   </article>
 
   <!-- Footer fills ONLY the main column -->
@@ -317,5 +357,35 @@ const nextTitle = p.nextTitle ?? fm.nextTitle;
     .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .pager a { display: block; color: var(--content-text); text-decoration: none; padding: 14px; border-radius: 16px; background: var(--brand-sky);}
     .pager .next { text-align: right; }
+
+    .related-questions {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border, rgba(0,0,0,.15));
+    }
+
+    .related-questions h2 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .question-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .question-card {
+      padding: 1rem 1.25rem;
+      border-radius: 14px;
+      background: var(--brand-sand-lighter, #f5f2ec);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .question-card h3 {
+      margin: 0 0 .5rem;
+      font-size: 1.05rem;
+    }
+
   </style>
 </SiteLayout>

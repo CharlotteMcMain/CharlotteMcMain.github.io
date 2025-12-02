@@ -1,32 +1,16 @@
 ---
+import { getCollection } from "astro:content";
 import SiteLayout from "../../../layouts/SiteLayout.astro";
 
-/** EAGER GLOB: loads modules at build time and returns an object.
- *  Each value has { frontmatter, url, ... } for MD/MDX pages.
- */
-const modules = import.meta.glob("./**/*.{md,mdx}", { eager: true });
+// grab all posts from the content collection
+const allPosts = await getCollection("posts");
 
-// Convert object → array of modules
-const allPosts = Object.values(modules);
-
-/** Shape guard (some editors like it explicit) */
-type PostMod = {
-  url?: string;
-  frontmatter?: {
-    title?: string;
-    description?: string;
-    pubDate?: string | Date;
-    heroImage?: string;
-    tags?: string[];
-    draft?: boolean;
-  };
-};
-
-const posts = (allPosts as PostMod[])
-  .filter((p) => !p.frontmatter?.draft)
+// only show posts whose slug starts with "physics/a-level/"
+const posts = allPosts
+  .filter((p) => p.slug.startsWith("physics/a-level/"))
   .sort((a, b) => {
-    const da = new Date(a.frontmatter?.pubDate || 0).getTime();
-    const db = new Date(b.frontmatter?.pubDate || 0).getTime();
+    const da = new Date(a.data.pubDate ?? 0).getTime();
+    const db = new Date(b.data.pubDate ?? 0).getTime();
     return db - da; // newest first
   });
 ---
@@ -38,27 +22,36 @@ const posts = (allPosts as PostMod[])
   </header>
 
   {posts.length === 0 ? (
-    <p>No posts yet. Add an MDX file in <code>src/pages/physics/gcse/</code>.</p>
+    <p>No posts yet. Add an MDX file in <code>src/content/posts/physics/a-level/</code>.</p>
   ) : (
     <section class="grid">
       {posts.map((post) => {
-        const fm = post.frontmatter ?? {};
+        const fm   = post.data;
         const title = fm.title ?? "Untitled post";
         const desc  = fm.description ?? "";
-        const date  = fm.pubDate ?? "";
+        const date  = fm.pubDate
+          ? new Date(fm.pubDate).toISOString().slice(0, 10)
+          : "";
         const tags  = fm.tags ?? [];
         const hero  = fm.heroImage ?? null;
+        const url   = `/${post.slug}`;
 
         return (
-          <a href={post.url} class="card" aria-label={title}>
+          <a href={url} class="card" aria-label={title}>
             {hero && <img src={hero} alt={title} loading="lazy" />}
             <div class="card-body">
               <h2 class="card-title">{title}</h2>
-              {date && <time class="card-date" datetime={String(date)}>{String(date)}</time>}
+              {date && (
+                <time class="card-date" datetime={date}>
+                  {date}
+                </time>
+              )}
               {desc && <p class="card-desc">{desc}</p>}
               {tags.length > 0 && (
                 <ul class="tags">
-                  {tags.map((t) => <li class="tag">#{t}</li>)}
+                  {tags.map((t) => (
+                    <li class="tag">#{t}</li>
+                  ))}
                 </ul>
               )}
             </div>
@@ -75,19 +68,35 @@ const posts = (allPosts as PostMod[])
     @media (min-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
 
     .card {
-      display: grid; grid-template-rows: auto 1fr;
-      text-decoration: none; color: inherit;
-      border: 1px solid var(--border); border-radius: 16px;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      text-decoration: none;
+      color: inherit;
+      border: 1px solid var(--border);
+      border-radius: 16px;
       background: var(--bg-alt, color-mix(in srgb, var(--brand-sand) 70%, white));
-      overflow: hidden; transition: transform .12s ease, box-shadow .12s ease;
+      overflow: hidden;
+      transition: transform .12s ease, box-shadow .12s ease;
     }
     .card:hover { transform: translateY(-2px); }
-    .card img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid var(--border); display: block; }
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-bottom: 1px solid var(--border);
+      display: block;
+    }
     .card-body { padding: 14px; display: grid; gap: 8px; }
     .card-title { font-size: 1.1rem; line-height: 1.25; margin: 0; }
     .card-date { font-size: .9rem; color: var(--muted, #6b7280); }
     .card-desc { margin: 0; color: var(--content-text, #2A2A3A); }
-    .tags { display: flex; flex-wrap: wrap; gap: 6px; color: var(--brand-sand)}
-    .tag { font-size: .8rem; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg, #fff); }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; color: var(--brand-sand); }
+    .tag {
+      font-size: .8rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg, #fff);
+    }
   </style>
 </SiteLayout>
