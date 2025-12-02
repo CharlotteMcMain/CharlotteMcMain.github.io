@@ -22,6 +22,7 @@ type PlotPointsConfig = {
   yLabel?: string;
   showBestFit?: boolean; // for later
   helperText?: string;
+  initialPoints?: Point[];
 };
 
 type QuestionPartCore = {
@@ -104,7 +105,9 @@ function renderWithKaTeX(text: string): React.ReactNode {
   return <>{parts}</>;
 }
 
-function sumMarks(parts: QuestionPart[]): number {
+function sumMarks(parts?: QuestionPart[]): number {
+  if (!Array.isArray(parts)) return 0;
+
   return parts.reduce((sum, p) => {
     const self = typeof p.marks === "number" ? p.marks : 0;
     const sub = p.subparts
@@ -138,6 +141,7 @@ const PlotPointsGraph: React.FC<{ id: string; config: PlotPointsConfig }> = ({
     yLabel = "y",
     showBestFit = false, // not implemented yet, placeholder
     helperText,
+    initialPoints = [],
   } = config;
 
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -163,9 +167,17 @@ const PlotPointsGraph: React.FC<{ id: string; config: PlotPointsConfig }> = ({
     const svg = svgRef.current;
     if (!svg) return;
 
-    const rect = svg.getBoundingClientRect();
-    const x = e.clientX - rect.left - paddingLeft;
-    const y = e.clientY - rect.top - paddingTop;
+    // Convert to internal SVG coordinates
+    const pt = svg.createSVGPoint();
+    pt.x = e.clientX;
+    pt.y = e.clientY;
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return;
+
+    const svgPoint = pt.matrixTransform(ctm.inverse());
+
+    const x = svgPoint.x - paddingLeft;
+    const y = svgPoint.y - paddingTop;
 
     if (x < 0 || x > plotWidth || y < 0 || y > plotHeight) return;
 
@@ -175,27 +187,38 @@ const PlotPointsGraph: React.FC<{ id: string; config: PlotPointsConfig }> = ({
     let xCoord = xMin + xFrac * (xMax - xMin);
     let yCoord = yMin + yFrac * (yMax - yMin);
 
-    xCoord = Math.round(xCoord / xStep) * xStep;
-    yCoord = Math.round(yCoord / yStep) * yStep;
+    // finer snapping
+    const xSnap = xStep / SUBDIV;
+    const ySnap = yStep / SUBDIV;
+
+    xCoord = Math.round(xCoord / xSnap) * xSnap;
+    yCoord = Math.round(yCoord / ySnap) * ySnap;
 
     xCoord = Math.max(xMin, Math.min(xMax, xCoord));
     yCoord = Math.max(yMin, Math.min(yMax, yCoord));
 
     const snapped: Point = { x: xCoord, y: yCoord };
 
-    const idx = userPoints.findIndex((p) => p.x === snapped.x && p.y === snapped.y);
-    let next: Point[];
-
-    if (idx !== -1) {
-      next = [...userPoints];
-      next.splice(idx, 1);
-    } else {
-      next = [...userPoints, snapped];
+    const isInitial = initialPoints.some(
+      (p) => p.x === snapped.x && p.y === snapped.y
+    );
+    if (isInitial) {
+      setFeedback(null);
+      return;
     }
 
-    setUserPoints(next);
+    const idx = userPoints.findIndex((p) => p.x === snapped.x && p.y === snapped.y);
+    if (idx !== -1) {
+      const next = [...userPoints];
+      next.splice(idx, 1);
+      setUserPoints(next);
+    } else {
+      setUserPoints([...userPoints, snapped]);
+    }
+
     setFeedback(null);
   };
+
 
   const handleReset = () => {
     setUserPoints([]);
@@ -279,10 +302,10 @@ const PlotPointsGraph: React.FC<{ id: string; config: PlotPointsConfig }> = ({
 
       <svg
         ref={svgRef}
-        width={width}
-        height={height}
+        viewBox={`0 0 ${width} ${height}`}
         className="laq-graph-svg"
         onClick={handleClick}
+        style={{ width: "100%", maxWidth: "100%", height: "auto" }}
       >
         {/* background plot area */}
         <rect
@@ -409,6 +432,44 @@ const PlotPointsGraph: React.FC<{ id: string; config: PlotPointsConfig }> = ({
         >
           {yLabel}
         </text>
+
+        {/* fixed initial points */}
+        {initialPoints.map((p, i) => {
+          const { px, py } = coordToPixel(p);
+          return (
+            <circle
+              key={`init-${i}`}
+              cx={px}
+              cy={py}
+              r={2}
+              className="laq-graph-point-initial"
+            />
+          );
+        })}
+
+        {/* user points as X markers */}
+        {userPoints.map((p, i) => {
+          const { px, py } = coordToPixel(p);
+          return (
+            <g key={`user-${i}`}>
+              <line
+                x1={px - 5}
+                y1={py - 5}
+                x2={px + 5}
+                y2={py + 5}
+                className="laq-graph-point-cross-line"
+              />
+              <line
+                x1={px - 5}
+                y1={py + 5}
+                x2={px + 5}
+                y2={py - 5}
+                className="laq-graph-point-cross-line"
+              />
+            </g>
+          );
+        })}
+
 
         {/* user points as X markers */}
         {userPoints.map((p, i) => {

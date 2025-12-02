@@ -1,0 +1,88 @@
+---
+title: "June 2024 Exploring Physics – Q17"
+questionId: "2024-ep-17"
+board: "OCR A"
+session: "June 2024"
+code: "A-17"
+marks: 11
+tags: ["a-level", "long-answer", "exploring-physics", "graphs"]
+---
+
+import LongAnswerQuestion from "@/components/LongAnswerQuestions.tsx";
+
+export const { questionId, board, session, code, marks } = frontmatter;
+
+<LongAnswerQuestion
+  client:load
+  id="2024-ep-17"
+  meta="OCR A · June 2024 · Q17"
+  stem={`The diagram shows two identical loudspeakers X and Y connected to a signal generator.
+The loudspeakers emit sound waves of the same amplitude and frequency which are in phase.
+A microphone M is moved along a line from $P_1$ to $P_3$ and the signal recorded on an oscilloscope.
+
+<span class="mcq-image-wrap">
+  <img
+    src="/assets/exam-pictures/june-2024-17-ocrA.webp"
+    alt="Two loudspeakers interference setup"
+  />
+</span>
+
+As the microphone is moved along the line $P_1$ to $P_3$ the oscilloscope shows maximum signal at
+$P_1$, zero signal at $P_2$ and the next maximum signal at $P_3$.`}
+  parts={[
+    {
+      id: "a",
+      label: "a",
+      text: "Explain these observations.",
+      marks: 2,
+      explanation:
+        "At $P_1$ and $P_3$ the path difference is an integer multiple of $\\lambda$, so the waves arrive in phase and interfere constructively to give a maximum signal. At $P_2$ the path difference is an odd multiple of $\\frac{\\lambda}{2}$, so the waves arrive $180^{\\circ}$ out of phase and interfere destructively, giving (approximately) zero signal.",
+    },
+    {
+      id: "b",
+      label: "b",
+      text: `The distance between the centres of X and Y is $70.0\\ \\text{cm}$, the distance $D$ (as shown in the
+diagram) is $4.00\\ \\text{m}$ and the distance from $P_1$ to $P_2$ is $1.25\\ \\text{m}$.
+Use the two–source interference formula to calculate the frequency of the sound waves.
+(Take the speed of sound as $340\\ \\text{m s}^{-1}$.)`,
+      marks: 4,
+      explanation:
+        "Use the two–source interference formula $\\Delta x = \\dfrac{\\lambda D}{a}$, where $\\Delta x$ is the spacing between adjacent maxima and minima at the screen/microphone, $D$ is the distance to the microphone line and $a$ is the separation of the sources. Here $\\Delta x = 1.25\\,\\text{m}$, $D = 4.00\\,\\text{m}$ and $a = 0.700\\,\\text{m}$. Hence $\\lambda = \\dfrac{\\Delta x\\,a}{D}$ and $f = \\dfrac{v}{\\lambda}$ with $v = 340\\,\\text{m s}^{-1}$. (Correct numerical evaluation gains the remaining credit.)",
+    },
+    {
+      id: "c",
+      label: "c",
+      text: `Loudspeaker Y is now replaced with a loudspeaker that produces sound waves of twice the
+original amplitude. Describe how the signal observed on the oscilloscope varies as the microphone is moved along
+the line $P_1$ to $P_3$.`,
+      marks: 2,
+      explanation:
+        "The positions of maxima and minima are unchanged (same wavelength and geometry), but the maximum signal increases because the resultant amplitude is larger. The minima are no longer exactly zero because the amplitudes from the two sources are now unequal, so interference is not perfectly destructive.",
+    },
+    {
+      id: "d",
+      label: "d",
+      text: "The intensity of the sound at $P_1$ in the new arrangement is now considered:",
+      marks: 3,
+      subparts: [
+        {
+          id: "di",
+          label: "i",
+          text: `Explain what is meant by the term intensity.`,
+          marks: 1,
+          explanation:
+            "Intensity is the power transmitted per unit area (normal to the direction of wave propagation).",
+        },
+        {
+          id: "dii",
+          label: "ii",
+          text:
+            "Calculate the factor by which the intensity of the sound waves at $P_1$ in (c) is larger than the intensity of the original sound waves at $P_1$.",
+          marks: 2,
+          explanation:
+            "Intensity is proportional to the square of the resultant amplitude: $I \\propto A^2$. If one source still has amplitude $A$ and the other has amplitude $2A$, then at $P_1$ the resultant amplitude changes from $2A$ (originally) to $3A$. Hence the intensity increases by a factor of $\\left(\\dfrac{3A}{2A}\\right)^2 = \\left(\\dfrac{3}{2}\\right)^2 = \\dfrac{9}{4}$.",
+        },
+      ],
+    },
+  ]}
+/>

@@ -1,10 +1,16 @@
 ---
-title: "June 2024 – Exploring Physics Q16"
+title: "June 2024 Exploring Physics – Q16"
 questionId: "2024-ep-16"
-tags: ["a-level", "long-answer", "graphs"]
+board: "OCR A"
+session: "June 2024"
+code: "A-16"
+marks: 1
+tags: ["a-level", "long-answer", "exploring-physics", "graphs"]
 ---
 
 import LongAnswerQuestion from "@/components/LongAnswerQuestions.tsx";
+
+export const { questionId, board, session, code, marks } = frontmatter;
 
 <LongAnswerQuestion
   client:load
@@ -36,13 +42,14 @@ circuit has been set up <b>incorrectly</b>.
       label: "a",
       text: "Describe how the student should change the circuit.",
       marks: 1,
-      explanation: "The voltmeter needs to be connected in parallel with the thermistor.",
+      explanation:
+        "The voltmeter needs to be connected in parallel with the thermistor.",
     },
     {
       id: "b",
       label: "b",
-      text: "The circuit was corrected and then used to collect data. The table shows data collected from the investigation.",
-      marks: 0,
+      text:
+        "The circuit was corrected and then used to collect data. The table shows data collected from the investigation.",
       subparts: [
         {
           id: "bi",
@@ -50,34 +57,73 @@ circuit has been set up <b>incorrectly</b>.
           text: `The axes below show a plot of current against temperature. The first four points from the table have been plotted. Plot the remaining points.`,
           marks: 2,
           graph: {
-            xMin: 20,
-            xMax: 100,
+            xMin: 30,
+            xMax: 90,
             xStep: 10,
             yMin: 0,
-            yMax: 12,
-            yStep: 2,
+            yMax: 5,
+            yStep: 1,
             xLabel: "Temperature / °C",
             yLabel: "Current / mA",
-            helperText: "Click on the grid to add or remove points. Then press “Check points”.",
             correctPoints: [
-              { x: 40, y: 3 },
-              { x: 50, y: 4 },
-              { x: 60, y: 6 },
-              { x: 70, y: 8 },
-              { x: 80, y: 10 },
-              // whatever the real mark-scheme points are
+              { x: 70, y: 2.8 },
+              { x: 80, y: 3.66 },
+              { x: 90, y: 4.76 },
             ],
-            tolerance: 0, // or 1 if you want to be forgiving in units
-            showBestFit: false, // later we can use this
+            initialPoints: [
+              { x: 30, y: 0.75 },
+              { x: 40, y: 1.1 },
+              { x: 50, y: 1.51 },
+              { x: 60, y: 2.1 },
+            ],
+            tolerance: 0,
+            showBestFit: false,
           },
-          explanation: "All remaining points should lie on the smooth curve following the trend of the first four.",
+          explanation:
+            "All remaining points should lie on the smooth curve following the trend of the first four.",
         },
         {
           id: "bii",
           label: "ii",
-          text: "Explain the shape of the graph.",
-          marks: 2,
-          explanation: "As temperature increases, the resistance of the NTC thermistor decreases, so the current increases non-linearly.",
+          text:
+            "Describe, using the graph and calculations using data from the table, how the resistance of the thermistor varies for increasing temperature. Hence determine whether the thermistor the student used was an NTC or a PTC thermistor.",
+          marks: 3,
+          explanation: `1. Describe what you see: As current increases, the temperature increases (whilst voltage remains constant).
+            2. Using Ohm's law ($V = IR$), it is possible to calculate resistance, e.g. $R = \\frac{V}{I}$; therefore $R = \\frac{3}{0.75\\times10^{-3}} = 4\\,\\Omega$ and $R = \\frac{3}{2.8} = 1.1\\,\\Omega$.
+            As such, we can see that as temperature increases, the resistance decreases.
+            3. Reviewing our definitions:
+            - **NTC (Negative Temperature Coefficient) thermistor** – resistance decreases as temperature increases
+            - **PTC (Positive Temperature Coefficient) thermistor** – resistance increases as temperature increases
+            Therefore, it is clear that this is an NTC thermistor.`,
+        },
+                {
+          id: "biii",
+          label: "iii",
+          text:
+            `The thermistor is used in a temperature-sensing circuit for a heating system to warm milk for a baby.
+            
+            The student considers two possible designs for the circuit which are shown below:
+            
+            <span class="mcq-image-wrap">
+            <img
+                src="/assets/exam-pictures/june-2024-16biii-ocrA.webp"
+                alt="Thermistor circuit"
+            />
+            </span>
+            
+            In each circuit the voltage $V_{\\text{out}}$ across the thermistor is connected to the heating system for warming the milk.
+            
+            Discuss which circuit may be suitable for the heating system by considering the response of the circuit to changes in temperature.`,
+          marks: 4,
+          explanation: ` We remember our circuit rules. $V_\\text{in} = V_\\text{out}$. Therefore, the voltage will always remain constant across the thermistor.
+          However, in circuit 2, a voltage divider is formed.
+          A voltage divider basically means two resistors in series. Whilst the current is the same everywhere, the voltage is split across both components.
+          So, in series, the total resistance is: $R_\\text{total}=R_1+R_2$.
+          Using Ohm's law: $V = IR$ therefore $I=\\frac{V}{R}=\\frac{V}{R_1+R_2}$.
+          To get the voltage across the thermistor, we are looking for V_\\text{out}. This means: $V_\\text{out}=I\\times R_2$.
+          Substituting our expression for current: $V_\\text{out}=(\\frac{V_\\text{supply}}{R_1+R_2})\\times R_2$.
+          Therefore, if we now consider that $R_2$ changes, we will see a change in the voltage.
+           `,
         },
       ],
     },

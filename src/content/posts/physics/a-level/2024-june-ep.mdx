@@ -29,7 +29,7 @@ import EP_Q13 from "@/content/questions/2024-ep-13.mdx";
 import EP_Q14 from "@/content/questions/2024-ep-14.mdx";
 import EP_Q15 from "@/content/questions/2024-ep-15.mdx";
 import EP_Q16 from "@/content/questions/2024-ep-16.mdx";
-import PlotPointsQuestion from "@/components/PlotPointsQuestion.tsx";
+import EP_Q17 from "@/content/questions/2024-ep-17.mdx";
 
 ## Section A
 <EP_Q1 />
@@ -50,20 +50,9 @@ import PlotPointsQuestion from "@/components/PlotPointsQuestion.tsx";
 
 ## Section B
 <EP_Q16 />
+<EP_Q17 />
 
-<PlotPointsQuestion
-  client:load
-  id="2024-ep-16-bi"
-  questionText="Use this graph to answer part (b)(i). Click to add/remove points."
-  xMin={0}
-  xMax={100}
-  xStep={10}
-  yMin={0}
-  yMax={12}
-  yStep={2}
-  correctPoints={[
-    { x: 40, y: 3 },
-    { x: 50, y: 4 },
-    // etc – use whatever the exam mark scheme uses
-  ]}
-/>
+import SpeakerInterference from "@/components/SpeakerInterference.tsx";
+
+
+<SpeakerInterference client:load />
