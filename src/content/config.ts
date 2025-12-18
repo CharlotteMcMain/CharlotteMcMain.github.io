@@ -1,5 +1,6 @@
 // src/content/config.ts
 import { defineCollection, z } from "astro:content";
+import { definitions } from "./definitions/config.ts";
 
 const posts = defineCollection({
   type: "content",
@@ -42,4 +43,6 @@ const questions = defineCollection({
 export const collections = {
   posts,
   questions,
+  definitions,
 };
+

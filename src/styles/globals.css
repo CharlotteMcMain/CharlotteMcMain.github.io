@@ -506,3 +506,65 @@ img { max-width: 100%; height: auto; }
   stroke: #000;
   fill: #000;
 }
+
+/* ====== DEFINITION CARD STYLES ====== */
+.definition-card {
+  border: 2px solid var(--def-border);
+  border-radius: 16px;
+  padding: 16px 18px 18px;
+  background: var(--def-bg);
+}
+
+/* Subtle internal tag */
+.definition-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin-bottom: 10px;
+}
+
+/* Fixed term column */
+.definition-grid {
+  display: grid;
+  grid-template-columns: 14rem 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.definition-term {
+  font-weight: 700;
+}
+
+.definition-text {
+  font-weight: 400;
+}
+
+/* Topic colours — match your callouts */
+.definition-card[data-topic="Mechanics"] {
+  --def-bg: #f2fbf6;
+  --def-border: #7fcf9b;
+}
+
+.definition-card[data-topic="Waves"] {
+  --def-bg: #f2f6ff;
+  --def-border: #8aa5ff;
+}
+
+.definition-card[data-topic="Electricity"] {
+  --def-bg: #fff7ec;
+  --def-border: #f0b35c;
+}
+
+.definition-card[data-topic="Thermal"] {
+  --def-bg: #eefbf8;
+  --def-border: #7fd3c6;
+}
+
+/* Mobile */
+@media (max-width: 720px) {
+  .definition-grid {
+    grid-template-columns: 1fr;
+  }
+}

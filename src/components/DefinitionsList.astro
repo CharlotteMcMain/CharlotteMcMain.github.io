@@ -1,0 +1,46 @@
+---
+import { getCollection } from "astro:content";
+import DefinitionCard from "./DefinitionCard";
+
+const slugify = (s: string) =>
+  s.toLowerCase()
+    .replace(/['’]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+
+const defs = await getCollection("definitions");
+const sorted = [...defs].sort((a, b) => a.data.term.localeCompare(b.data.term));
+
+// Render MDX bodies BEFORE returning JSX
+const items = await Promise.all(
+  sorted.map(async (def) => {
+    const { Content } = await def.render();
+    return {
+      id: slugify(def.data.term),
+      term: def.data.term,
+      topic: def.data.topic,
+      Content,
+    };
+  })
+);
+---
+
+{items.length === 0 ? (
+  <p>No definitions found.</p>
+) : (
+  <div class="defsWrap">
+    {items.map((d) => (
+      <DefinitionCard id={d.id} term={d.term} topic={d.topic}>
+        <d.Content />
+      </DefinitionCard>
+    ))}
+  </div>
+)}
+
+<style>
+  .defsWrap {
+    display: grid;
+    gap: 16px;
+    margin-top: 18px;
+  }
+</style>
