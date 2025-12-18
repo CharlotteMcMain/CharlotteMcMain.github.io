@@ -1,0 +1,30 @@
+---
+title: "PMT Electric Fields Q1"
+questionId: "1"
+board: "OCR A"
+session: "Unsure"
+code: "1"
+marks: 1
+tags: ["a-level", "MCQ"]
+---
+
+import MultipleChoiceQuestion from "@/components/MultipleChoiceQuestions.tsx";
+
+export const { questionId, board, session, code, marks } = frontmatter;
+
+<MultipleChoiceQuestion
+  client:load
+  id={questionId}
+  stem={`An electron at point P experiences an electric force of magnitude 1.8 µN due to the positive nucleus. What is the magnitude of the force experienced by the same electron when it is at point Q?`}
+  options={[
+    { id: "a", label: "$0.28\\mu\\text{m}$" },
+    { id: "b", label: "$0.55\\mu\\text{m}$" },
+    { id: "c", label: "$1.0\\mu\\text{m}$" },
+    { id: "d", label: "$1.8\\mu\\text{m}$" },
+  ]}
+  correctId="b"
+  marks={marks}
+  meta={`${board} · ${session} · ${code}`}
+>
+  
+</MultipleChoiceQuestion>
