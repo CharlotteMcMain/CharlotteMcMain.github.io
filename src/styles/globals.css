@@ -552,7 +552,7 @@ img { max-width: 100%; height: auto; }
   --def-border: #8aa5ff;
 }
 
-.definition-card[data-topic="Electricity"] {
+.definition-card[data-topic="Electric Fields"] {
   --def-bg: #fff7ec;
   --def-border: #f0b35c;
 }
