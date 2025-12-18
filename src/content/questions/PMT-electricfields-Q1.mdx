@@ -1,23 +1,30 @@
 ---
-title: "Q1"
-questionId: "PMT-EF-1"
+title: "June 2024 Exploring Physics – Q1"
+questionId: "2024-ep-1"
 board: "OCR A"
-code: "1"
+session: "June 2024"
+code: "A-1"
 marks: 1
-tags: ["a-level", "MCQ"]
---- 
+tags: ["a-level", "MCQ", "exploring-physics", "SI-units"]
+---
+
 
 import MultipleChoiceQuestion from "@/components/MultipleChoiceQuestions.tsx";
 
 export const { questionId, board, session, code, marks } = frontmatter;
-<MultipleChoiceQuestion 
-client:load 
-id={questionId} 
-stem={What are the base units of a kilowatt-hour?} 
-options={[ { id: "A", label: "$\text{J}$" }, 
-{ id: "B", label: "$\text{kg m}^2 \text{s}^{-1}$" }, 
-{ id: "C", label: "$\text{kg m}^2 \text{s}^{-2}$" }, 
-{ id: "D", label: "$\text{W s}$" }, ]} 
-correctId="C" 
-marks={marks} 
-meta={${board} · ${session} · ${code}}
+
+<MultipleChoiceQuestion
+  client:load
+  id={questionId}
+  stem={`What are the base units of a kilowatt-hour?`}
+  options={[
+    { id: "A", label: "$\\text{J}$" },
+    { id: "B", label: "$\\text{kg m}^2 \\text{s}^{-1}$" },
+    { id: "C", label: "$\\text{kg m}^2 \\text{s}^{-2}$" },
+    { id: "D", label: "$\\text{W s}$" },
+  ]}
+  correctId="C"
+  marks={marks}
+  meta={`${board} · ${session} · ${code}`}
+>
+  Kilowatt-hour ($\text{kWh}$) means: $1000 \text{W} \times 1 \text{hour}$  
