@@ -7,7 +7,14 @@ const posts = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
+
     pubDate: z.coerce.date().optional(),
+    updatedDate: z.coerce.date().optional(), // ✅ add (optional but useful)
+
+    // ✅ add these (required for your TopicLanding filter/grouping)
+    topic: z.string().optional(),
+    type: z.enum(["notes", "past-papers", "misc"]).default("misc"),
+
     heroImage: z.string().optional(),
     heroCaption: z.string().optional(),
     tags: z.array(z.string()).default([]),
@@ -16,7 +23,7 @@ const posts = defineCollection({
     prevTitle: z.string().optional(),
     nextHref: z.string().optional(),
     nextTitle: z.string().optional(),
-    // spec points you’ve been using:
+
     spec: z
       .object({
         ocrA: z.array(z.string()).optional(),
@@ -24,6 +31,7 @@ const posts = defineCollection({
         aqa: z.array(z.string()).optional(),
       })
       .optional(),
+
     relatedQuestions: z.array(z.string()).optional(), // slugs
   }),
 });
@@ -33,7 +41,7 @@ const questions = defineCollection({
   schema: z.object({
     title: z.string(),
     questionId: z.string().optional(),
-    tags: z.array(z.string()).default([]), // "gravity", "SI units", etc.
+    tags: z.array(z.string()).default([]),
     examBoard: z.string().optional(),
     paper: z.string().optional(),
     difficulty: z.enum(["easy", "medium", "hard"]).optional(),
@@ -45,4 +53,3 @@ export const collections = {
   questions,
   definitions,
 };
-

@@ -1,51 +1,59 @@
 ---
 import { getCollection } from "astro:content";
 
+/**
+ * Props passed from the topic page
+ */
 type Props = {
   title: string;
-  prefix: string; // e.g. "physics/a-level/forces-and-motion/"
+  topic: string; // e.g. "5_newtonian-world-and-astrophysics"
   description?: string;
   image?: { src: string; alt: string };
-  backHref?: string; // default: "/physics/a-level/"
+  backHref?: string;
+  includeUntagged?: boolean;
 };
 
 const {
   title,
-  prefix,
+  topic,
   description = "Notes, past paper walkthroughs, and other resources for this topic.",
   image,
   backHref = "/physics/a-level/",
+  includeUntagged = false, // ✅ default off
 } = Astro.props;
 
-const all = (await getCollection("posts"))
-  .filter((p) => p.id.startsWith(prefix))
+/**
+ * Collect ALL posts, then filter by frontmatter topic
+ */
+const posts = await getCollection("posts");
+
+const filtered = posts
+  .filter((p) => {
+    const t = (p.data as any).topic;
+    if (t == null || t === "") return includeUntagged; // untagged posts
+    return String(t) === topic; // tagged posts
+  })
   .map((p) => {
     const d: any = p.data;
     const updated = d.updatedDate ?? d.updated ?? d.pubDate ?? d.date;
     return { ...p, _updated: updated ? new Date(updated) : new Date(0) };
   })
   .sort((a, b) => b._updated.getTime() - a._updated.getTime());
+  
+/**
+ * Group by type
+ */
+function sectionOf(post: any): "notes" | "past" | "other" {
+  const type = String(post.data?.type ?? "").toLowerCase();
 
-function sectionOf(post: any): "notes" | "walkthroughs" | "other" {
-  const d: any = post.data;
-
-  // Recommended: frontmatter: type: "notes" | "walkthrough" | "other"
-  const t = (d.type ?? d.kind ?? "").toString().toLowerCase();
-  if (["notes", "note"].includes(t)) return "notes";
-  if (["walkthrough", "walkthroughs", "past-paper", "pastpaper", "ppq"].includes(t)) return "walkthroughs";
-  if (["other", "misc"].includes(t)) return "other";
-
-  // Fallback: infer from folder naming
-  const id = post.id.toLowerCase();
-  if (id.includes("/notes/")) return "notes";
-  if (id.includes("/past-paper") || id.includes("/walkthrough")) return "walkthroughs";
-
+  if (type === "notes") return "notes";
+  if (type === "past-papers" || type === "past" || type === "walkthrough") return "past";
   return "other";
 }
 
-const notes = all.filter((p) => sectionOf(p) === "notes");
-const walkthroughs = all.filter((p) => sectionOf(p) === "walkthroughs");
-const other = all.filter((p) => sectionOf(p) === "other");
+const notes = filtered.filter((p) => sectionOf(p) === "notes");
+const past = filtered.filter((p) => sectionOf(p) === "past");
+const other = filtered.filter((p) => sectionOf(p) === "other");
 
 const hrefFor = (p: any) => `/${p.id.replace(/\.mdx?$/, "")}/`;
 const prettyDate = (p: any) => {
@@ -62,9 +70,10 @@ const prettyDate = (p: any) => {
 <header class="hero">
   {image && (
     <div class="heroImgWrap">
-      <img class="heroImg" src={image.src} alt={image.alt} loading="lazy" />
+      <img src={image.src} alt={image.alt} class="heroImg" loading="lazy" />
     </div>
   )}
+
   <div>
     <h1>{title}</h1>
     <p>{description}</p>
@@ -77,7 +86,7 @@ const prettyDate = (p: any) => {
     <ol class="list">
       {notes.map((p) => (
         <li>
-          <a href={hrefFor(p)}>{p.data.title ?? p.id}</a>
+          <a href={hrefFor(p)}>{p.data.title}</a>
           <span class="date">{prettyDate(p)}</span>
         </li>
       ))}
@@ -89,11 +98,11 @@ const prettyDate = (p: any) => {
 
 <section class="block">
   <h2>Past paper walkthroughs</h2>
-  {walkthroughs.length ? (
+  {past.length ? (
     <ol class="list">
-      {walkthroughs.map((p) => (
+      {past.map((p) => (
         <li>
-          <a href={hrefFor(p)}>{p.data.title ?? p.id}</a>
+          <a href={hrefFor(p)}>{p.data.title}</a>
           <span class="date">{prettyDate(p)}</span>
         </li>
       ))}
@@ -109,7 +118,7 @@ const prettyDate = (p: any) => {
     <ol class="list">
       {other.map((p) => (
         <li>
-          <a href={hrefFor(p)}>{p.data.title ?? p.id}</a>
+          <a href={hrefFor(p)}>{p.data.title}</a>
           <span class="date">{prettyDate(p)}</span>
         </li>
       ))}
@@ -120,37 +129,71 @@ const prettyDate = (p: any) => {
 </section>
 
 <style>
-  .back{display:inline-block;opacity:.8;text-decoration:none;margin:.5rem 0 1rem}
-  .back:hover{opacity:1}
-
-  .hero{
-    display:grid;
-    grid-template-columns: 180px 1fr;
-    gap:1.25rem;
-    align-items:center;
-    margin: .25rem 0 1.5rem;
+  .back {
+    display: inline-block;
+    opacity: 0.8;
+    margin: 0.5rem 0 1rem;
+    text-decoration: none;
   }
-  .hero h1{margin:0 0 .35rem}
-  .hero p{margin:0;opacity:.8}
 
-  .heroImgWrap{
-    border-radius:16px;
-    overflow:hidden;
-    border:2px solid var(--callout-border, rgba(255,255,255,.15));
-    background:var(--callout-bg, rgba(255,255,255,.03));
+  .hero {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 1.25rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .heroImgWrap {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid var(--callout-border, rgba(255,255,255,.15));
+    background: var(--callout-bg, rgba(255,255,255,.03));
     aspect-ratio: 1 / 1;
   }
-  .heroImg{width:100%;height:100%;object-fit:cover;display:block}
 
-  @media (max-width: 720px){
-    .hero{grid-template-columns:1fr}
-    .heroImgWrap{max-width:220px}
+  .heroImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
-  .block{margin:1.75rem 0}
-  .list{margin:.75rem 0 0;padding-left:1.1rem}
-  .list li{margin:.35rem 0; display:flex; gap:.75rem; justify-content:space-between; align-items:baseline}
-  .list a{text-decoration:none;font-weight:600}
-  .date{opacity:.7; white-space:nowrap; font-size:.95rem}
-  .empty{opacity:.75;margin:.6rem 0 0}
+  .block {
+    margin: 1.75rem 0;
+  }
+
+  .list {
+    padding-left: 1.1rem;
+    margin-top: 0.75rem;
+  }
+
+  .list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin: 0.35rem 0;
+  }
+
+  .list a {
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .date {
+    opacity: 0.7;
+    white-space: nowrap;
+  }
+
+  .empty {
+    opacity: 0.7;
+  }
+
+  @media (max-width: 720px) {
+    .hero {
+      grid-template-columns: 1fr;
+    }
+    .heroImgWrap {
+      max-width: 220px;
+    }
+  }
 </style>

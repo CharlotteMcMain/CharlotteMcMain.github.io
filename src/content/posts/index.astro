@@ -1,5 +1,30 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
+
+import { z, defineCollection } from "astro:content";
+
+export const posts = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    pubDate: z.coerce.date().optional(),
+    updatedDate: z.coerce.date().optional(),
+
+    // ✅ add these
+    topic: z.string(),
+    type: z.enum(["notes", "past-papers", "misc"]).default("misc"),
+
+    // whatever else you already have...
+    tags: z.array(z.string()).optional(),
+    heroImage: z.string().optional(),
+    heroCaption: z.string().optional(),
+    kicker: z.string().optional(),
+    prevHref: z.string().optional(),
+    prevTitle: z.string().optional(),
+    nextHref: z.string().optional(),
+    nextTitle: z.string().optional(),
+  }),
+});
 ---
 
 <SiteLayout title="Home — Charlotte McMain">
