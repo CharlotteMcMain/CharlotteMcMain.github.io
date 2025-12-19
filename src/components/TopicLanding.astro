@@ -1,0 +1,156 @@
+---
+import { getCollection } from "astro:content";
+
+type Props = {
+  title: string;
+  prefix: string; // e.g. "physics/a-level/forces-and-motion/"
+  description?: string;
+  image?: { src: string; alt: string };
+  backHref?: string; // default: "/physics/a-level/"
+};
+
+const {
+  title,
+  prefix,
+  description = "Notes, past paper walkthroughs, and other resources for this topic.",
+  image,
+  backHref = "/physics/a-level/",
+} = Astro.props;
+
+const all = (await getCollection("posts"))
+  .filter((p) => p.id.startsWith(prefix))
+  .map((p) => {
+    const d: any = p.data;
+    const updated = d.updatedDate ?? d.updated ?? d.pubDate ?? d.date;
+    return { ...p, _updated: updated ? new Date(updated) : new Date(0) };
+  })
+  .sort((a, b) => b._updated.getTime() - a._updated.getTime());
+
+function sectionOf(post: any): "notes" | "walkthroughs" | "other" {
+  const d: any = post.data;
+
+  // Recommended: frontmatter: type: "notes" | "walkthrough" | "other"
+  const t = (d.type ?? d.kind ?? "").toString().toLowerCase();
+  if (["notes", "note"].includes(t)) return "notes";
+  if (["walkthrough", "walkthroughs", "past-paper", "pastpaper", "ppq"].includes(t)) return "walkthroughs";
+  if (["other", "misc"].includes(t)) return "other";
+
+  // Fallback: infer from folder naming
+  const id = post.id.toLowerCase();
+  if (id.includes("/notes/")) return "notes";
+  if (id.includes("/past-paper") || id.includes("/walkthrough")) return "walkthroughs";
+
+  return "other";
+}
+
+const notes = all.filter((p) => sectionOf(p) === "notes");
+const walkthroughs = all.filter((p) => sectionOf(p) === "walkthroughs");
+const other = all.filter((p) => sectionOf(p) === "other");
+
+const hrefFor = (p: any) => `/${p.id.replace(/\.mdx?$/, "")}/`;
+const prettyDate = (p: any) => {
+  const d: any = p.data;
+  const date = d.updatedDate ?? d.updated ?? d.pubDate ?? d.date;
+  return date
+    ? new Date(date).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
+    : "";
+};
+---
+
+<a class="back" href={backHref}>← Back</a>
+
+<header class="hero">
+  {image && (
+    <div class="heroImgWrap">
+      <img class="heroImg" src={image.src} alt={image.alt} loading="lazy" />
+    </div>
+  )}
+  <div>
+    <h1>{title}</h1>
+    <p>{description}</p>
+  </div>
+</header>
+
+<section class="block">
+  <h2>Notes</h2>
+  {notes.length ? (
+    <ol class="list">
+      {notes.map((p) => (
+        <li>
+          <a href={hrefFor(p)}>{p.data.title ?? p.id}</a>
+          <span class="date">{prettyDate(p)}</span>
+        </li>
+      ))}
+    </ol>
+  ) : (
+    <p class="empty">No notes yet.</p>
+  )}
+</section>
+
+<section class="block">
+  <h2>Past paper walkthroughs</h2>
+  {walkthroughs.length ? (
+    <ol class="list">
+      {walkthroughs.map((p) => (
+        <li>
+          <a href={hrefFor(p)}>{p.data.title ?? p.id}</a>
+          <span class="date">{prettyDate(p)}</span>
+        </li>
+      ))}
+    </ol>
+  ) : (
+    <p class="empty">No walkthroughs yet.</p>
+  )}
+</section>
+
+<section class="block">
+  <h2>Other</h2>
+  {other.length ? (
+    <ol class="list">
+      {other.map((p) => (
+        <li>
+          <a href={hrefFor(p)}>{p.data.title ?? p.id}</a>
+          <span class="date">{prettyDate(p)}</span>
+        </li>
+      ))}
+    </ol>
+  ) : (
+    <p class="empty">Nothing else here yet.</p>
+  )}
+</section>
+
+<style>
+  .back{display:inline-block;opacity:.8;text-decoration:none;margin:.5rem 0 1rem}
+  .back:hover{opacity:1}
+
+  .hero{
+    display:grid;
+    grid-template-columns: 180px 1fr;
+    gap:1.25rem;
+    align-items:center;
+    margin: .25rem 0 1.5rem;
+  }
+  .hero h1{margin:0 0 .35rem}
+  .hero p{margin:0;opacity:.8}
+
+  .heroImgWrap{
+    border-radius:16px;
+    overflow:hidden;
+    border:2px solid var(--callout-border, rgba(255,255,255,.15));
+    background:var(--callout-bg, rgba(255,255,255,.03));
+    aspect-ratio: 1 / 1;
+  }
+  .heroImg{width:100%;height:100%;object-fit:cover;display:block}
+
+  @media (max-width: 720px){
+    .hero{grid-template-columns:1fr}
+    .heroImgWrap{max-width:220px}
+  }
+
+  .block{margin:1.75rem 0}
+  .list{margin:.75rem 0 0;padding-left:1.1rem}
+  .list li{margin:.35rem 0; display:flex; gap:.75rem; justify-content:space-between; align-items:baseline}
+  .list a{text-decoration:none;font-weight:600}
+  .date{opacity:.7; white-space:nowrap; font-size:.95rem}
+  .empty{opacity:.75;margin:.6rem 0 0}
+</style>

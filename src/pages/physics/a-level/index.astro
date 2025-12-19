@@ -2,31 +2,53 @@
 import { getCollection } from "astro:content";
 import SiteLayout from "../../../layouts/SiteLayout.astro";
 
-// Grab all posts in the A-level folder
 const posts = (await getCollection("posts"))
   .filter((p) => p.id.startsWith("physics/a-level/"))
   .map((p) => {
     const data: any = p.data;
     const updated = data.updatedDate ?? data.updated ?? data.pubDate ?? data.date;
-    return {
-      ...p,
-      _updated: updated ? new Date(updated) : new Date(0),
-    };
+    return { ...p, _updated: updated ? new Date(updated) : new Date(0) };
   });
 
-// Sort by updated date and take top 5
-const recent = [...posts]
-  .sort((a, b) => b._updated.getTime() - a._updated.getTime())
-  .slice(0, 5);
+const recent = [...posts].sort((a, b) => b._updated.getTime() - a._updated.getTime()).slice(0, 5);
 
-// Main course topics
 const topics = [
-  { title: "Practical Skills", href: "/physics/a-level/practical-skills/" },
-  { title: "Measurements and Units", href: "/physics/a-level/measurements-and-units/" },
-  { title: "Forces & Motion", href: "/physics/a-level/forces-and-motion/" },
-  { title: "Electrons, Waves and Photons", href: "/physics/a-level/electrons-waves-photons/" },
-  { title: "Newtonian World and Astrophysics", href: "/physics/a-level/newtonian-world-and-astrophysics/" },
-  { title: "Particles and Medical Physics", href: "/physics/a-level/particles-and-medical-physics/" },
+  {
+    title: "Practical Skills",
+    href: "/physics/a-level/1_practical-skills/",
+    img: "/images/physics/a-level/practical-skills.jpg",
+    alt: "Practical skills in physics",
+  },
+  {
+    title: "Measurements and Units",
+    href: "/physics/a-level/measurements-and-units/",
+    img: "/images/physics/a-level/measurements.jpg",
+    alt: "Measurements and units",
+  },
+  {
+    title: "Forces & Motion",
+    href: "/physics/a-level/forces-and-motion/",
+    img: "/images/physics/a-level/forces-motion.jpg",
+    alt: "Forces and motion",
+  },
+  {
+    title: "Electrons, Waves and Photons",
+    href: "/physics/a-level/electrons-waves-photons/",
+    img: "/images/physics/a-level/waves.jpg",
+    alt: "Waves and photons",
+  },
+  {
+    title: "Newtonian World and Astrophysics",
+    href: "/physics/a-level/newtonian-world-and-astrophysics/",
+    img: "/images/physics/a-level/astro.jpg",
+    alt: "Astrophysics",
+  },
+  {
+    title: "Particles and Medical Physics",
+    href: "/physics/a-level/particles-and-medical-physics/",
+    img: "/images/physics/a-level/particles-medical.jpg",
+    alt: "Particles and medical physics",
+  },
 ];
 ---
 
@@ -34,17 +56,20 @@ const topics = [
   <h1>A-level Physics</h1>
   <p>Main course topics and the most recently updated resources.</p>
 
-  <!-- Main topics -->
-  <section class="grid" aria-label="Main topics">
+  <section class="topicGrid" aria-label="Main topics">
     {topics.map((t) => (
-      <a class="tile" href={t.href}>
-        <span class="tileTitle">{t.title}</span>
-        <span class="tileHint">Explore →</span>
+      <a class="topicCard" href={t.href}>
+        <div class="topicImgWrap">
+          <img class="topicImg" src={t.img} alt={t.alt} loading="lazy" />
+        </div>
+        <div class="topicMeta">
+          <span class="topicTitle">{t.title}</span>
+          <span class="topicHint">Explore →</span>
+        </div>
       </a>
     ))}
   </section>
 
-  <!-- Recent content -->
   <section class="recent" aria-label="Most recent">
     <div class="recentHeader">
       <h2>Recently updated</h2>
@@ -61,11 +86,7 @@ const topics = [
               <span class="recentTitle">{d.title ?? p.id}</span>
               {date && (
                 <time class="recentDate" datetime={new Date(date).toISOString()}>
-                  {new Date(date).toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })}
+                  {new Date(date).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
                 </time>
               )}
             </a>
@@ -154,5 +175,55 @@ const topics = [
   .recentDate {
     opacity: 0.7;
     white-space: nowrap;
+  }
+
+  .topicGrid{
+    display:grid;
+    grid-template-columns:repeat(12, 1fr);
+    gap:1rem;
+    margin:1.5rem 0 2.5rem;
+  }
+
+  .topicCard{
+    grid-column:span 4;              /* 3 across on desktop */
+    display:flex;
+    flex-direction:column;
+    text-decoration:none;
+    border:2px solid var(--callout-border, rgba(255,255,255,.15));
+    border-radius:16px;
+    overflow:hidden;
+    background:var(--callout-bg, rgba(255,255,255,.03));
+  }
+
+  .topicCard:hover{ transform: translateY(-1px); }
+
+  .topicImgWrap{
+    aspect-ratio: 4 / 3;             /* makes a nice consistent rectangle */
+    width:100%;
+    overflow:hidden;
+  }
+
+  .topicImg{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .topicMeta{
+    padding:0.9rem 1rem;
+    display:flex;
+    flex-direction:column;
+    gap:0.35rem;
+  }
+
+  .topicTitle{ font-weight:700; }
+  .topicHint{ opacity:.75; font-size:.95rem; }
+
+  @media (max-width: 900px){
+    .topicCard{ grid-column: span 6; } /* 2 across */
+  }
+  @media (max-width: 720px){
+    .topicCard{ grid-column: span 12; } /* 1 across */
   }
 </style>
