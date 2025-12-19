@@ -1,0 +1,101 @@
+---
+import { getCollection } from "astro:content";
+import SiteLayout from "../../../../layouts/SiteLayout.astro";
+
+const posts = (await getCollection("posts"))
+  .filter((p) => (p.data as any).type === "past-papers")
+  .map((p) => {
+    const d: any = p.data;
+    const updated = d.updatedDate ?? d.updated ?? d.pubDate;
+    return { ...p, _updated: updated ? new Date(updated) : new Date(0) };
+  })
+  .sort((a, b) => b._updated.getTime() - a._updated.getTime());
+
+// Optional: group by topic
+const byTopic = new Map<string, any[]>();
+
+for (const p of posts) {
+  const topic = (p.data as any).topic ?? "General";
+  if (!byTopic.has(topic)) byTopic.set(topic, []);
+  byTopic.get(topic)!.push(p);
+}
+
+const hrefFor = (p: any) => `/${p.id.replace(/\.mdx?$/, "")}/`;
+const prettyDate = (p: any) => {
+  const d: any = p.data;
+  const date = d.updatedDate ?? d.updated ?? d.pubDate;
+  return date
+    ? new Date(date).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    : "";
+};
+---
+<SiteLayout title="Past Papers — A-level Physics">
+  <a href="/physics/a-level/" class="back">← Back to A-level Physics</a>
+
+  <header class="hero">
+    <h1>Past Papers & Walkthroughs</h1>
+    <p>
+      Exam questions and fully worked solutions from across the entire A-level
+      Physics course.
+    </p>
+  </header>
+
+  {[...byTopic.entries()].map(([topic, items]) => (
+    <section class="block">
+      <h2>{topic === "General" ? "General / Untagged" : topic}</h2>
+
+      <ol class="list">
+        {items.map((p) => (
+          <li>
+            <a href={hrefFor(p)}>{p.data.title}</a>
+            <span class="date">{prettyDate(p)}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
+  ))}
+</SiteLayout>
+
+<style>
+  .back {
+    display: inline-block;
+    margin: .5rem 0 1rem;
+    text-decoration: none;
+    opacity: .8;
+  }
+
+  .hero p {
+    max-width: 65ch;
+    opacity: .8;
+  }
+
+  .block {
+    margin: 2rem 0;
+  }
+
+  .list {
+    margin-top: .75rem;
+    padding-left: 1.1rem;
+  }
+
+  .list li {
+    display: flex;
+    justify-content: space-between;
+    gap: .75rem;
+    margin: .35rem 0;
+  }
+
+  .list a {
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .date {
+    opacity: .7;
+    white-space: nowrap;
+  }
+</style>

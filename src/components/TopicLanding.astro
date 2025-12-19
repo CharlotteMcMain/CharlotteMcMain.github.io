@@ -55,7 +55,7 @@ const notes = filtered.filter((p) => sectionOf(p) === "notes");
 const past = filtered.filter((p) => sectionOf(p) === "past");
 const other = filtered.filter((p) => sectionOf(p) === "other");
 
-const hrefFor = (p: any) => `/${p.id.replace(/\.mdx?$/, "")}/`;
+const hrefFor = (p: any) => `/${p.slug}/`;
 const prettyDate = (p: any) => {
   const d: any = p.data;
   const date = d.updatedDate ?? d.updated ?? d.pubDate ?? d.date;
@@ -65,16 +65,20 @@ const prettyDate = (p: any) => {
 };
 ---
 
-<a class="back" href={backHref}>← Back</a>
-
 <header class="hero">
   {image && (
-    <div class="heroImgWrap">
-      <img src={image.src} alt={image.alt} class="heroImg" loading="lazy" />
-    </div>
+    <img
+      class="heroBg"
+      src={image.src}
+      alt={image.alt}
+      loading="lazy"
+    />
   )}
 
-  <div>
+  <div class="heroOverlay"></div>
+
+  <div class="heroInner">
+    <a class="back" href={backHref}>← Back to A-level Physics</a>
     <h1>{title}</h1>
     <p>{description}</p>
   </div>
@@ -129,33 +133,69 @@ const prettyDate = (p: any) => {
 </section>
 
 <style>
-  .back {
-    display: inline-block;
-    opacity: 0.8;
-    margin: 0.5rem 0 1rem;
-    text-decoration: none;
-  }
-
   .hero {
-    display: grid;
-    grid-template-columns: 180px 1fr;
-    gap: 1.25rem;
+    position: relative;
+    width: 100%;
+    min-height: 320px;
+    margin-bottom: 2.25rem;
+    display: flex;
     align-items: center;
-    margin-bottom: 1.5rem;
   }
 
-  .heroImgWrap {
-    border-radius: 16px;
-    overflow: hidden;
-    border: 2px solid var(--callout-border, rgba(255,255,255,.15));
-    background: var(--callout-bg, rgba(255,255,255,.03));
-    aspect-ratio: 1 / 1;
-  }
-
-  .heroImg {
+  .heroBg {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .heroOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.45),
+      rgba(0,0,0,0.65)
+    );
+  }
+
+  .heroInner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1000px;          /* match your SiteLayout width */
+    padding: 2.25rem 1.25rem;
+    margin: 0 auto;
+    color: white;
+  }
+
+  .heroInner h1 {
+    margin: 0 0 .5rem;
+  }
+
+  .heroInner p {
+    margin: 0;
+    max-width: 65ch;
+    opacity: 0.9;
+  }
+
+  .back {
+    display: inline-block;
+    margin-bottom: 0.75rem;
+    text-decoration: none;
+    color: white;
+    opacity: 0.85;
+  }
+
+  .back:hover {
+    opacity: 1;
+  }
+
+  @media (max-width: 720px) {
+    .hero {
+      min-height: 260px;
+    }
   }
 
   .block {
@@ -187,13 +227,5 @@ const prettyDate = (p: any) => {
   .empty {
     opacity: 0.7;
   }
-
-  @media (max-width: 720px) {
-    .hero {
-      grid-template-columns: 1fr;
-    }
-    .heroImgWrap {
-      max-width: 220px;
-    }
   }
 </style>

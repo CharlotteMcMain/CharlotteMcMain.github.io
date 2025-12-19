@@ -70,6 +70,19 @@ const topics = [
     ))}
   </section>
 
+  <section class="pastPapersHero">
+    <a href="/physics/a-level/past-papers/" class="pastPapersCard">
+      <div class="pastPapersText">
+        <h2>Past Papers & Walkthroughs</h2>
+        <p>
+          Exam-style questions and full worked solutions from across the entire
+          A-level course.
+        </p>
+        <span class="cta">Browse all past papers →</span>
+      </div>
+    </a>
+  </section>
+
   <section class="recent" aria-label="Most recent">
     <div class="recentHeader">
       <h2>Recently updated</h2>
@@ -82,7 +95,7 @@ const topics = [
         const date = d.updatedDate ?? d.updated ?? d.pubDate ?? d.date;
         return (
           <li class="recentItem">
-            <a class="recentLink" href={`/${p.id.replace(/\.mdx?$/, "")}/`}>
+            <a class="recentLink" href={`/${p.slug}/`}>
               <span class="recentTitle">{d.title ?? p.id}</span>
               {date && (
                 <time class="recentDate" datetime={new Date(date).toISOString()}>
@@ -225,5 +238,36 @@ const topics = [
   }
   @media (max-width: 720px){
     .topicCard{ grid-column: span 12; } /* 1 across */
+  }
+
+  .pastPapersHero {
+    margin: 2rem 0 2.5rem;
+  }
+
+  .pastPapersCard {
+    display: block;
+    padding: 1.5rem 1.75rem;
+    border-radius: 18px;
+    text-decoration: none;
+    border: 2px solid var(--callout-border, rgba(255,255,255,.15));
+    background: var(--callout-bg, rgba(255,255,255,.03));
+  }
+
+  .pastPapersCard:hover {
+    transform: translateY(-1px);
+  }
+
+  .pastPapersText h2 {
+    margin: 0 0 .35rem;
+  }
+
+  .pastPapersText p {
+    margin: 0 0 .75rem;
+    opacity: .8;
+    max-width: 65ch;
+  }
+
+  .cta {
+    font-weight: 600;
   }
 </style>
