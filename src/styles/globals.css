@@ -132,8 +132,8 @@ img { max-width: 100%; height: auto; }
   margin: 1.25rem 0;
   padding: 1rem 1.25rem;
   border-radius: 16px;
-  background: var(--brand-sand-lighter, #f5f2ec);
   border: 1px solid var(--border, rgba(0, 0, 0, 0.1));
+  background: white;
 }
 
 .mcq-header {
@@ -171,12 +171,13 @@ img { max-width: 100%; height: auto; }
   padding: 0.55rem 0.75rem;
   border-radius: 999px;
   border: 1px solid var(--border, rgba(0, 0, 0, 0.1));
-  background: #fff;
+  background: var(--brand-sand-lighter);
   cursor: pointer;
   text-align: left;
   font-size: 0.95rem;
   transition: transform 0.08s ease, box-shadow 0.08s ease,
     border-color 0.12s ease, background 0.12s ease;
+  color: var(--content-text);
 }
 
 .mcq-option:hover {
@@ -250,6 +251,7 @@ img { max-width: 100%; height: auto; }
   border: 1px solid rgba(0,0,0,0.1);
   background: #fff;
   cursor: pointer;
+  color: var(--brand-pink);
 }
 
 .mcq-explanation {
@@ -260,14 +262,6 @@ img { max-width: 100%; height: auto; }
   line-height: 1.55;
   font-size: 0.95rem;
 }
-
-.mcq-meta {
-  font-size: 0.75rem;
-  color: rgba(0, 0, 0, 0.55);
-  margin-bottom: 0.35rem;
-  letter-spacing: 0.02em;
-}
-
 /* Row containing meta (left) and marks (right) */
 .mcq-meta-row {
   display: flex;
@@ -278,8 +272,9 @@ img { max-width: 100%; height: auto; }
 /* Meta text styling */
 .mcq-meta {
   font-size: 0.75rem;
-  color: rgba(0, 0, 0, 0.55);
+  color: var(--border);
   letter-spacing: 0.02em;
+  margin-bottom: 0.35rem;
 }
 
 /* Marks pill */

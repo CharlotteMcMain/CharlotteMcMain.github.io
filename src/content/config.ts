@@ -36,17 +36,52 @@ const posts = defineCollection({
   }),
 });
 
+const base = z.object({
+  title: z.string(),
+  questionId: z.string(),
+  board: z.string(),
+  session: z.string(),
+  code: z.string(),
+  marks: z.number(),
+  tags: z.array(z.string()).default([]),
+  stem: z.string(),
+});
+
+const mcqSchema = base.extend({
+  type: z.literal("mcq"),
+  options: z.array(z.object({ id: z.string(), label: z.string() })),
+  correctId: z.string(),
+});
+
+const longSchema = base.extend({
+  type: z.literal("long"),
+  parts: z.array(
+    z.object({
+      id: z.string(),
+      label: z.string().optional(),
+      text: z.string(),
+      marks: z.number(),
+      explanation: z.string().optional(),
+      subparts: z
+        .array(
+          z.object({
+            id: z.string(),
+            label: z.string().optional(),
+            text: z.string(),
+            marks: z.number(),
+            explanation: z.string().optional(),
+          })
+        )
+        .optional(),
+    })
+  ),
+});
+
 const questions = defineCollection({
   type: "content",
-  schema: z.object({
-    title: z.string(),
-    questionId: z.string().optional(),
-    tags: z.array(z.string()).default([]),
-    examBoard: z.string().optional(),
-    paper: z.string().optional(),
-    difficulty: z.enum(["easy", "medium", "hard"]).optional(),
-  }),
+  schema: z.discriminatedUnion("type", [mcqSchema, longSchema]),
 });
+
 
 export const collections = {
   posts,
