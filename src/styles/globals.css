@@ -128,379 +128,39 @@ img { max-width: 100%; height: auto; }
   box-shadow: none;
 }
 
-.mcq {
-  margin: 1.25rem 0;
-  padding: 1rem 1.25rem;
-  border-radius: 16px;
-  border: 1px solid var(--border, rgba(0, 0, 0, 0.1));
-  background: white;
+/* ===== MCQ STYLES ===== */
+.mcq{
+  background:#fff;
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:14px;
+  padding:16px;
+  margin:18px 0;
 }
-
-.mcq-header {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
-  align-items: flex-start;
+.mcq__meta{display:flex; gap:10px; align-items:center; flex-wrap:wrap; opacity:.85; font-size:13px;}
+.mcq__tag{padding:4px 10px; border-radius:999px; border:1px solid rgba(0,0,0,.12);}
+.mcq__stem{margin-top:10px; font-size:16px;}
+.mcq__options{display:grid; gap:10px; margin-top:14px;}
+.mcq__option{
+  text-align:left;
+  border-radius:12px;
+  border:1px solid rgba(0,0,0,.10);
+  padding:12px 12px;
+  background:#fff;
+  display:grid;
+  grid-template-columns:28px 1fr;
+  gap:10px;
 }
-
-.mcq-stem {
-  font-weight: 500;
-  line-height: 1.5;
-  margin-top: 0;
-  margin-bottom: 0.3rem;
-}
-
-.mcq-marks {
-  font-size: 0.8rem;
-  padding: 0.15rem 0.6rem;
-  border-radius: 999px;
-  background: var(--brand-steel, #4E7CB2);
-  color: #fff;
-  white-space: nowrap;
-}
-
-.mcq-options {
-  display: grid;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.mcq-option {
-  display: flex;
-  gap: 0.5rem;
-  padding: 0.55rem 0.75rem;
-  border-radius: 999px;
-  border: 1px solid var(--border, rgba(0, 0, 0, 0.1));
-  background: var(--brand-sand-lighter);
-  cursor: pointer;
-  text-align: left;
-  font-size: 0.95rem;
-  transition: transform 0.08s ease, box-shadow 0.08s ease,
-    border-color 0.12s ease, background 0.12s ease;
-  color: var(--content-text);
-}
-
-.mcq-option:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-}
-
-.mcq-option-label {
-  font-weight: 600;
-  min-width: 1.5rem;
-}
-
-.mcq-option--selected {
-  border-color: var(--brand-steel, #4e7cb2);
-  background: color-mix(in srgb, var(--brand-sand) 40%, white);
-}
-
-.mcq-option--correct {
-  border-color: #16a34a;
-  background: #ecfdf3;
-}
-
-.mcq-option--incorrect {
-  border-color: #dc2626;
-  background: #fef2f2;
-}
-
-.mcq-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.mcq-submit {
-  border: 1px solid var(--brand-pink, #eb4797);
-  background: var(--brand-pink, #eb4797);
-  color: white;
-  padding: 0.4rem 0.9rem;
-  border-radius: 999px;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
-.mcq-submit:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
-
-.mcq-result {
-  font-size: 0.9rem;
-}
-
-.mcq-result--correct {
-  color: #16a34a;
-}
-
-.mcq-result--incorrect {
-  color: #dc2626;
-}
-
-.mcq-explanation-wrapper {
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px dashed rgba(0,0,0,0.1);
-}
-
-.mcq-explanation-button {
-  font-size: 0.8rem;
-  border-radius: 999px;
-  padding: 0.25rem 0.7rem;
-  border: 1px solid rgba(0,0,0,0.1);
-  background: #fff;
-  cursor: pointer;
-  color: var(--brand-pink);
-}
-
-.mcq-explanation {
-  margin-top: 0.6rem;
-  background: rgba(255,255,255,0.6);
-  border-radius: 0.6rem;
-  padding: 0.7rem 0.9rem;
-  line-height: 1.55;
-  font-size: 0.95rem;
-}
-/* Row containing meta (left) and marks (right) */
-.mcq-meta-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Meta text styling */
-.mcq-meta {
-  font-size: 0.75rem;
-  color: var(--border);
-  letter-spacing: 0.02em;
-  margin-bottom: 0.35rem;
-}
-
-/* Marks pill */
-.mcq-marks {
-  font-size: 0.75rem;
-  padding: 0.2rem 0.55rem;
-  border-radius: 999px;
-  background: var(--brand-steel, #4E7CB2);
-  color: #fff;
-  white-space: nowrap;
-}
-
-.mcq-image-wrap {
-  display: block;        /* full width inside the stem */
-  text-align: center;    /* center the img */
-  margin-top: 0.5rem;     /* small gap above/below the diagram */
-}
-
-.mcq-image-wrap img {
-  display: inline-block;
-  max-width: 100%;
-  height: auto;
-}
-
-.long-answer-question {
-  margin: 1.5rem 0;
-}
-
-.long-answer-question .question-stem {
-  margin-bottom: 0.75rem;
-}
-
-.long-answer-question .question-parts {
-  list-style: none;
-  padding-left: 0;
-  margin: 0 0 0.75rem 0;
-}
-
-.long-answer-question .question-part + .question-part {
-  margin-top: 0.5rem;
-}
-
-.long-answer-question .question-part-header {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
-  font-size: 0.9rem;
-  opacity: 0.9;
-  margin-bottom: 0.1rem;
-}
-
-.long-answer-question .part-label {
-  font-weight: 600;
-}
-
-.long-answer-question .part-marks {
-  font-style: italic;
-}
-
-.long-answer-question .question-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 0.75rem;
-}
-
-.long-answer-question .explanation-toggle {
-  border-radius: 999px;
-  padding: 0.3rem 0.9rem;
-  border: 1px solid var(--brand-steel, #4e7cb2);
-  background: var(--brand-sand-lighter, #f5f5f5);
-  cursor: pointer;
-  font-size: 0.85rem;
-}
-
-.long-answer-question .question-explanation {
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px dashed rgba(255, 255, 255, 0.15);
-  font-size: 0.95rem;
-}
-
-.question-subparts {
-  list-style: none;
-  margin: 0.25rem 0 0 1.5rem;
-  padding: 0;
-  display: grid;
-  gap: 0.35rem;
-}
-
-.question-subpart {
-  margin: 0;
-}
-
-.plot-question {
-  margin-top: 1rem;
-  padding: 0.75rem;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.05);
-}
-
-.plot-graph-wrapper {
-  overflow-x: auto;
-}
-
-.plot-graph-svg {
-  cursor: crosshair;
-  border-radius: 8px;
-}
-
-.plot-background {
-  fill: rgba(255, 255, 255, 0.04);
-}
-
-.plot-grid-line {
-  stroke: rgba(255, 255, 255, 0.08);
-  stroke-width: 1;
-}
-
-.plot-axis {
-  stroke: rgba(255, 255, 255, 0.5);
-  stroke-width: 1.5;
-}
-
-.plot-label {
-  font-size: 0.65rem;
-  fill: rgba(255, 255, 255, 0.8);
-}
-
-.plot-user-point {
-  fill: var(--brand-pink, #eb4797);
-}
-
-.plot-controls {
-  margin-top: 0.5rem;
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.plot-btn {
-  border-radius: 999px;
-  padding: 0.25rem 0.9rem;
-  border: 1px solid var(--brand-steel, #4e7cb2);
-  background: var(--brand-sand-lighter, #f5f5f5);
-  cursor: pointer;
-  font-size: 0.8rem;
-}
-
-.plot-btn.secondary {
-  opacity: 0.8;
-}
-
-.plot-feedback {
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
-}
-
-.plot-coords {
-  margin-top: 0.25rem;
-  font-size: 0.8rem;
-}
-
-/* ====== GRAPH BACKGROUND ====== */
-.laq-graph-svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.laq-graph-bg {
-  fill: white; /* NOT black */
-}
-
-/* ====== MAIN GRID (FINE DOT GRID LIKE EXAM PAPERS) ====== */
-.laq-grid-minor {
-  stroke: var(--brand-sand);
-  stroke-width: 0.5;
-  shape-rendering: crispEdges;
-}
-
-.laq-grid-major {
-  stroke: var(--brand-steel);
-  stroke-width: 1;
-  shape-rendering: crispEdges;
-}
-
-/* ====== AXES ====== */
-.laq-graph-axis {
-  stroke: var(--brand-navy-dark);
-  stroke-width: 1.6;
-  shape-rendering: crispEdges;
-}
-
-/* ====== AXIS LABELS & TICKS ====== */
-.laq-graph-label {
-  fill: var(--brand-navy-dark);
-  font-size: 0.75rem;
-  font-weight: 400;
-  user-select: none;
-}
-
-/* ====== USER POINT MARKERS (X SHAPES INSTEAD OF DOTS) ====== */
-.laq-graph-point-cross-line {
-  stroke: var(--brand-navy); /* switch to black if you prefer */
-  stroke-width: 2;
-  stroke-linecap: round;
-}
-
-/* ====== BUTTONS (reuse your MCQ buttons) ====== */
-.laq-graph-controls .mcq-explanation-button {
-  margin-top: 0.5rem;
-}
-
-/* ====== FEEDBACK TEXT ====== */
-.laq-graph-feedback {
-  margin-top: 0.4rem;
-  font-size: 0.85rem;
-  color: white;
-}
-
-.laq-graph-point-initial {
-  stroke: #000;
-  fill: #000;
-}
+.mcq__option:hover{border-color:rgba(0,0,0,.20);}
+.mcq__optKey{font-weight:700; opacity:.8;}
+.mcq__actions{display:flex; gap:10px; align-items:center; margin-top:14px; flex-wrap:wrap;}
+.mcq__btn{border-radius:10px; padding:10px 12px; border:1px solid rgba(0,0,0,.15); background:#fff;}
+.mcq__btn--ghost{opacity:.8;}
+.mcq__result{font-weight:600;}
+.mcq__explanation{margin-top:14px; padding-top:14px; border-top:1px solid rgba(0,0,0,.08);}
+.mcq__exTitle{font-weight:700; margin-bottom:8px;}
+.is-selected{outline:2px solid rgba(0,0,0,.20);}
+.is-correct{border-color:rgba(0,160,80,.55);}
+.is-wrong{border-color:rgba(220,60,60,.55);}
 
 /* ====== DEFINITION CARD STYLES ====== */
 .definition-card {
@@ -562,4 +222,185 @@ img { max-width: 100%; height: auto; }
   .definition-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ====== MULTI-PART QUESTION STYLES ====== */
+
+.qbox {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 16px;
+  margin: 18px 0;
+}
+
+.qmeta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 13px;
+  opacity: 0.9;
+  margin-bottom: 10px;
+}
+
+.qtag {
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.qid {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.qmarks {
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.qstem {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Each part box */
+.mpart {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.mphead {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.mpprompt {
+  line-height: 1.5;
+}
+
+/* Numeric input row */
+.mpinput {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.mpinput input {
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 15px;
+  min-width: 180px;
+  outline: none;
+  background: #fff;
+}
+
+.mpinput input:focus {
+  border-color: rgba(0, 0, 0, 0.28);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+
+.mpunits {
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+/* Buttons + results line */
+.qactions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.qactions button {
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.qactions button:hover {
+  border-color: rgba(0, 0, 0, 0.25);
+}
+
+.qactions button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.qexp {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.qexp strong {
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
+/* KaTeX spacing inside cards */
+.qbox .katex-display {
+  margin: 10px 0;
+}
+
+/* Optional: status coloring (if you add these classes later) */
+.is-correct {
+  border-color: rgba(0, 160, 80, 0.45) !important;
+  box-shadow: 0 0 0 3px rgba(0, 160, 80, 0.08);
+}
+
+.is-wrong {
+  border-color: rgba(220, 60, 60, 0.45) !important;
+  box-shadow: 0 0 0 3px rgba(220, 60, 60, 0.08);
+}
+
+/* Options container */
+.qopts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+/* Each option row */
+.qopt {
+  width: 100%;              /* 👈 full width */
+  box-sizing: border-box;  /* important */
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  align-items: center;     /* vertical centring */
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #fff;
+  cursor: pointer;
+}
+
+/* Letter */
+.qkey {
+  text-align: left;
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+/* Option text */
+.qlabel {
+  display: flex;
+  align-items: center;     /* keeps math vertically centred */
+  font-size: medium;
 }

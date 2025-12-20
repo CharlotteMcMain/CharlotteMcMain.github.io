@@ -1,0 +1,55 @@
+---
+import { getCollection } from "astro:content";
+import MCQ from "./MCQ";
+import MultiPart from "./MultiPart";
+import { parseMultipart } from "../lib/parseMultipart.ts";
+import { parseMCQ } from "../lib/parseMCQ.ts";
+
+const { id } = Astro.props;
+
+if (!id || typeof id !== "string") throw new Error(`Question.astro: missing required prop "id"`);
+
+const entries = await getCollection("questions");
+const entry = entries.find((e) => (e as any).data?.id === id);
+if (!entry) throw new Error(`Question not found: ${id}`);
+
+const data: any = entry.data;
+const meta = data.meta ?? [data.board, data.session, data.paper].filter(Boolean).join(" · ") ?? undefined;
+
+let mcq = null;
+let multipart = null;
+
+if (data.type === "mcq") {
+  const parsed = parseMCQ(entry.body ?? "");
+  mcq = {
+    id: data.id,
+    meta,
+    marks: data.marks,
+    stem: parsed.stem,
+    options: parsed.options,
+    correctId: parsed.correctId,
+    explanation: parsed.explanation,
+  };
+}
+
+if (data.type === "multipart") {
+  const parsed = parseMultipart(entry.body ?? "");
+  multipart = {
+    id: data.id,
+    meta,
+    stem: parsed.stem ?? "",
+    parts: (data.parts ?? []).map((p: any) => ({
+      id: p.id,
+      marks: p.marks,
+      kind: p.kind,
+      prompt: parsed.prompts?.[p.id] ?? "",
+      scheme: parsed.schemes?.[p.id] ?? "",
+      explanation: parsed.explanations?.[p.id] ?? "",
+      ...(p.kind === "numeric" ? { answer: p.answer, tolerance: p.tolerance, units: p.units } : {}),
+    })),
+  };
+}
+---
+
+{mcq && <MCQ q={mcq} client:load />}
+{multipart && <MultiPart q={multipart} client:load />}

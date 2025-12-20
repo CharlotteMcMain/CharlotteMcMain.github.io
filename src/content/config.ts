@@ -1,6 +1,7 @@
 // src/content/config.ts
 import { defineCollection, z } from "astro:content";
 import { definitions } from "./definitions/config.ts";
+import { questions } from "./questions/config";
 
 const posts = defineCollection({
   type: "content",
@@ -47,44 +48,9 @@ const base = z.object({
   stem: z.string(),
 });
 
-const mcqSchema = base.extend({
-  type: z.literal("mcq"),
-  options: z.array(z.object({ id: z.string(), label: z.string() })),
-  correctId: z.string(),
-});
-
-const longSchema = base.extend({
-  type: z.literal("long"),
-  parts: z.array(
-    z.object({
-      id: z.string(),
-      label: z.string().optional(),
-      text: z.string(),
-      marks: z.number(),
-      explanation: z.string().optional(),
-      subparts: z
-        .array(
-          z.object({
-            id: z.string(),
-            label: z.string().optional(),
-            text: z.string(),
-            marks: z.number(),
-            explanation: z.string().optional(),
-          })
-        )
-        .optional(),
-    })
-  ),
-});
-
-const questions = defineCollection({
-  type: "content",
-  schema: z.discriminatedUnion("type", [mcqSchema, longSchema]),
-});
-
-
 export const collections = {
   posts,
   questions,
   definitions,
 };
+
