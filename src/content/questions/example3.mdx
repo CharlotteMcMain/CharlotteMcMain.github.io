@@ -1,0 +1,110 @@
+---
+type: multipart
+id: kinematics-003
+topic: electricfields
+meta: Unknown
+parts:
+  - id: ai
+    marks: 1
+    kind: numeric
+    answer: 6
+    tolerance: 0
+    units: "\\mu F"
+
+  - id: aii
+    marks: 2
+    kind: numeric
+    answer: 1.33
+    tolerance: 0
+    units: "\\mu F"
+
+  - id: bi
+    marks: 1
+    kind: numeric
+    answer: 6.0
+    tolerance: 0.0
+    units: "V"
+
+  - id: bii
+    marks: 2
+    kind: numeric
+    answer: 36
+    tolerance: 0
+    units: "\\mu C"
+
+  - id: c
+    marks: 2
+    kind: numeric
+    answer: 24e-6
+    tolerance: 0
+    units: "J"
+
+  - id: di
+    marks: 1
+    kind: written
+
+  - id: dii
+    marks: 3
+    kind: numeric
+    answer: 100
+    tolerance: 0
+    units: "s"
+---
+
+Fig.1 shows two capacitors, **A** of capacitance $2\ \mu \text{F}$, and **B** of capacitance $4\ \mu \text{F}$, connected in parallel. 
+Fig. 2 shows them connected in series. A two-way switch **S** can connect the capacitors either to a d.c. supply, of e.m.f. $6\ \text{V}$, or to a voltmeter.
+
+### (a)
+Calculate the total capacitance of the capacitors
+
+#### (i)
+when connected as in Fig. 1
+
+#### (ii)
+when connected as in Fig. 2
+
+### (b)
+The switch in the circuit shown in Fig. 1 is then connected to the battery.
+Calculate
+#### (i)
+the potential difference across capacitor **A**
+#### (ii)
+the total charge stored on the capacitors.
+
+### (c)
+The switch in the circuit shown in Fig.2 is then connected to the battery. 
+Calculate the total energy stored in the two capacitors.
+
+### (d)
+The switch S in the circuit of Fig. 1 is moved to connect the charged capacitors to the voltmeter. The voltmeter has an internal resistance of $12\ \text{M}\ohm$.
+#### (i)
+Explain why the capacitors will discharge, although very slowly.
+#### (ii)
+Calculate the time *t* taken for the voltmeter reading to fall to a quarter of its initial reading.
+
+## Mark scheme
+
+### (a)
+#### (i)
+$C_p = 2+4 = 6\ \mu\text{F}$
+#### (ii)
+$\frac{1}{C} = \frac{1}{2}+\frac{1}{4}$
+$C_s = \frac{4}{3}=1.33\ \mu\text{F}$
+
+### (b)
+#### (i)
+$6.0\ \text{V}$
+#### (ii)
+$Q=C_pV=6\times 6=36\ \mu\text{C}$
+
+### (c)
+$E=\frac{1}{2}C_sV^2=24\times 10^{-6}$
+
+### (d)
+#### (i)
+The capacitors discharge through the voltmeter
+#### (ii)
+$V=V_0e^{-\frac{t}{CR}}$
+$\frac{1}{4}=e^{-\frac{t}{(6\times12)}}$
+$\ln{4}=\frac{t}{72}$
+$t=72\ln{4}\approx 100\ \text{s}$

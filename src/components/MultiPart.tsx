@@ -36,6 +36,33 @@ function parseNumber(s: string) {
   return Number.isFinite(n) ? n : null;
 }
 
+function formatPartLabel(id: string) {
+  const s = id.trim().toLowerCase();
+
+  // matches: a, b, c... optionally followed by roman numerals i/ii/iii...
+  const m = s.match(/^([a-z])([ivx]+)?$/i);
+  if (!m) return `(${id})`;
+
+  const main = m[1];
+  const sub = m[2];
+
+  if (!sub) return `(${main})`;
+  return `(${main})(${sub})`;
+}
+
+function isSubPart(id: string) {
+  return /^[a-z][ivx]+$/i.test(id); // ai, aii, biv...
+}
+
+function getSubLabel(id: string) {
+  // ai -> i, aii -> ii
+  return id.slice(1);
+}
+
+function getMainLabel(id: string) {
+  return id[0];
+}
+
 export default function MultiPart({ q }: { q: MPModel }) {
   const [reveal, setReveal] = useState<Record<string, boolean>>({});
   const [input, setInput] = useState<Record<string, string>>({});
@@ -59,10 +86,22 @@ export default function MultiPart({ q }: { q: MPModel }) {
         const isOpen = !!reveal[p.id];
 
         return (
-          <div className="mpart" key={p.id}>
-            <div className="mphead">
-              <strong>({p.id})</strong>
-              {typeof p.marks === "number" ? <span className="qmarks">{p.marks} marks</span> : null}
+          <div
+            className={`mpart ${isSubPart(p.id) ? "mpart-sub" : "mpart-main"}`}
+            key={p.id}
+          >
+            <div
+              className={`mphead ${isSubPart(p.id) ? "is-subpart" : "is-mainpart"}`}
+            >
+              <strong>
+                {isSubPart(p.id)
+                  ? `(${getSubLabel(p.id)})`
+                  : `(${getMainLabel(p.id)})`}
+              </strong>
+
+              {typeof p.marks === "number" ? (
+                <span className="qmarks">{p.marks} marks</span>
+              ) : null}
             </div>
 
             <div className="mpprompt"><MD text={p.prompt} /></div>

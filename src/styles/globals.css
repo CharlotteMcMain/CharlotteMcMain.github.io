@@ -404,3 +404,15 @@ img { max-width: 100%; height: auto; }
   align-items: center;     /* keeps math vertically centred */
   font-size: medium;
 }
+
+.mphead.is-subpart strong {
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+/* Sub-part boxes (i), (ii), etc */
+.mpart-sub {
+  margin-left: 32px;           /* 👈 main indentation */
+  border-left: 3px solid rgba(0, 0, 0, 0.08);
+  padding-left: 14px;
+}
