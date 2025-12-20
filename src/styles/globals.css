@@ -410,9 +410,31 @@ img { max-width: 100%; height: auto; }
   opacity: 0.9;
 }
 
-/* Sub-part boxes (i), (ii), etc */
+/* Space between main parts (a), (b), (c) */
+.mpgroup {
+  margin-top: 10px;   /* 👈 increase this (24–40px is typical) */
+}
+
+/* Parent box that contains (a) heading + its (i)/(ii) boxes */
+.mpgroup-box {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.01);
+  padding: 12px;
+  margin-top: 12px;
+}
+
+/* Parent header row inside that box */
+.mpgroup-head {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+/* Nested subpart boxes should indent within the parent box */
 .mpart-sub {
-  margin-left: 32px;           /* 👈 main indentation */
+  margin-left: 32px;
   border-left: 3px solid rgba(0, 0, 0, 0.08);
   padding-left: 14px;
 }
