@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520">
+  <style>
+    .w{stroke:currentColor;stroke-width:6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .node{fill:var(--content-bg,#fff);stroke:currentColor;stroke-width:6}
+    .t{font-family:"Fredoka",system-ui,sans-serif;font-size:36px;font-weight:500;fill:currentColor}
+    .ts{font-family:"Fredoka",system-ui,sans-serif;font-size:34px;font-weight:700;fill:currentColor}
+  </style><path class="w" d="M170 120 h650" /><path class="w" d="M170 430 h650" /><path class="w" d="M170 120 v310" /><path class="w" d="M425 200 v60" /><g transform="translate(425 320)" ><circle cx="0" cy="0" r="44" class="w" /><text x="-12" y="12" class="ts">V</text></g><path class="w" d="M425 364 v66" /><g transform="translate(420 160)" ><circle cx="-20" cy="0" r="8" class="node" /><circle cx="20" cy="0" r="8" class="node" /><path class="w" d="M-20 0 l80 -28" /></g><text x="410" y="105" class="ts">S</text><path class="w" d="M760 120 L760 205" /><g transform="translate(760 245)" ><path class="w" d="M0 -32 V-14" /><path class="w" d="M-40 -14 H40" /><path class="w" d="M-40 14 H40" /><path class="w" d="M0 14 V32" /></g><text x="815" y="255" class="ts">A</text><path class="w" d="M760 259 L760 291" /><g transform="translate(760 305)" ><path class="w" d="M0 -32 V-14" /><path class="w" d="M-40 -14 H40" /><path class="w" d="M-40 14 H40" /><path class="w" d="M0 14 V32" /></g><text x="815" y="315" class="ts">B</text><path class="w" d="M760 345 L760 430" /><text x="430" y="505" class="ts">Fig. 2</text></svg>

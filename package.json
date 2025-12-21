@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "export:diagrams": "tsx scripts/export-diagrams.ts"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",
@@ -24,6 +25,7 @@
     "remark-math": "^6.0.0"
   },
   "devDependencies": {
-    "@astrojs/mdx": "^4.3.9"
+    "@astrojs/mdx": "^4.3.9",
+    "tsx": "^4.7.0"
   }
 }
