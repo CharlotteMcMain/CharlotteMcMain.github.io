@@ -20,9 +20,9 @@
 
   <!-- ===== rails ===== -->
   <!-- bottom rail -->
-  <path class="w" d="M170 430 H820" />
+  <path class="w" d="M170 430 H760" />
   <!-- top rail (to the right of the switch) -->
-  <path class="w" d="M443 160 H820" />
+  <path class="w" d="M443 160 H760" />
 
   <!-- ===== supply / battery (left) ===== -->
   <!-- left vertical wire (top to bottom) -->
