@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 820">
+    <style>
+  @font-face{
+    font-family:"Fredoka";
+    src:url("/fonts/Fredoka-Regular.ttf") format("truetype");
+    font-weight:400;
+    font-style:normal;
+    font-display:swap;
+  }
+  @font-face{
+    font-family:"Fredoka";
+    src:url("/fonts/Fredoka-Bold.ttf") format("truetype");
+    font-weight:700;
+    font-style:normal;
+    font-display:swap;
+  }
+    .w { stroke:#000; stroke-width:6; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+    .t { font-family: "Fredoka", system-ui, sans-serif; font-size:36px; fill:#000; }
+    .ts { font-family: "Fredoka", system-ui, sans-serif; font-size:34px; fill:#000; font-weight:600; }
+    .tslarge { font-family: "Fredoka", system-ui, sans-serif; font-size:48px; fill:#000; font-weight:600; }
+  </style>
+
+  <!-- ===== rails ===== -->
+  <!-- bottom rail -->
+  <path class="w" d="M170 700 H650" />
+  <!-- top rail -->
+  <path class="w" d="M170 100 H340" />
+
+  <!-- ===== supply / battery (left) ===== -->
+  <path class="w" d="M170 700 V420" />
+  <path class="w" d="M170 385 V100" />
+  <path class="w" d="M135 385 H205" />
+  <path class="w" d="M145 415 H195" />
+  <text class="ts" x="130" y="370">V</text>
+
+  <!-- ===== switch S (two-way to voltmeter) ===== -->
+  <!-- top left node -->
+  <circle cx="350" cy="100" r="8" fill="none" stroke="#000" stroke-width="6"/>
+  <!-- top right node (to right side) -->
+  <circle cx="470" cy="100" r="8" fill="none" stroke="#000" stroke-width="6"/>
+  <!-- lower node (to voltmeter top) -->
+  <circle cx="400" cy="170" r="8" fill="none" stroke="#000" stroke-width="6"/>
+  <circle cx="420" cy="150" r="8" fill="none" stroke="#000" stroke-width="6"/>
+
+  <!-- switch fixed terminals -->
+
+  <path class="w" d="M480 100 H650" />
+  <!-- switch arm (currently shown connected to right) -->
+  <path class="w" d="M430 140 L465 105" />
+
+  <text class="ts" x="420" y="85">S</text>
+
+  <!-- ===== voltmeter (middle branch) ===== -->
+  <circle class="w" cx="400" cy="400" r="44"/>
+  <text class="tslarge" x="384" y="418">V</text>
+  <path class="w" d="M400 350 V180" />
+  <path class="w" d="M400 700 V445" />
+
+  <!-- ===== right side series capacitors ===== -->
+  <!-- right vertical wire from top rail down to first cap -->
+  <path class="w" d="M650 100 V240" />
+
+  <!-- capacitor A (upper) -->
+  <path class="w" d="M600 240 H700" />
+  <path class="w" d="M600 280 H700" />
+  <path class="w" d="M650 540 V280" />
+  <text class="ts" x="720" y="275">A</text>
+
+  <!-- capacitor B (lower) -->
+  <path class="w" d="M600 540 H700" />
+  <path class="w" d="M600 580 H700" />
+  <path class="w" d="M650 580 V700" />
+  <text class="ts" x="720" y="575">B</text>
+
+  <!-- figure label -->
+  <text class="ts" x="380" y="770">Fig. 2</text>
+</svg>

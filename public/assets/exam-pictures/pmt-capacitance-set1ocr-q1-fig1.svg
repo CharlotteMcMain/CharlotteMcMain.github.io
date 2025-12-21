@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 930 620">
+  <style>
+    @font-face{
+        font-family:"Fredoka";
+        src:url("/fonts/Fredoka-Regular.ttf") format("truetype");
+        font-weight:400;
+        font-style:normal;
+    }
+    @font-face{
+        font-family:"Fredoka";
+        src:url("/fonts/Fredoka-Bold.ttf") format("truetype");
+        font-weight:700;
+        font-style:normal;
+    }
+    .w { stroke:#000; stroke-width:6; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+    .t { font-family: "Fredoka", system-ui, sans-serif; font-size:36px; fill:#000; }
+    .ts { font-family: "Fredoka", system-ui, sans-serif; font-size:34px; fill:#000; font-weight:600; }
+    .tslarge { font-family: "Fredoka", system-ui, sans-serif; font-size:48px; fill:#000; font-weight:600; }
+  </style>
+
+  <!-- ===== rails ===== -->
+  <!-- bottom rail -->
+  <path class="w" d="M170 430 H820" />
+  <!-- top rail (to the right of the switch) -->
+  <path class="w" d="M443 160 H820" />
+
+  <!-- ===== supply / battery (left) ===== -->
+  <!-- left vertical wire (top to bottom) -->
+  <path class="w" d="M170 160 V270" />
+  <path class="w" d="M170 305 V430" />
+  <!-- battery plates -->
+  <path class="w" d="M125 270 H210" />
+  <path class="w" d="M145 305 H195" />
+  <!-- label V near source -->
+  <text class="ts" x="115" y="250">V</text>
+
+  <!-- ===== switch S (SPDT-ish) ===== -->
+  <!-- left top node (from supply) -->
+  <circle cx="330" cy="160" r="8" fill="white" stroke="#000" stroke-width="6"/>
+  <!-- common node (to top rail) -->
+  <circle cx="430" cy="160" r="8" fill="white" stroke="#000" stroke-width="6"/>
+  <!-- lower node (to voltmeter top) -->
+  <circle cx="360" cy="210" r="8" fill="white" stroke="#000" stroke-width="6"/>
+  <circle cx="390" cy="190" r="8" fill="white" stroke="#000" stroke-width="6"/>
+
+  <!-- wire from supply top to left switch node -->
+  <path class="w" d="M170 160 H320" />
+  <!-- movable contact (arm) -->
+  <path class="w" d="M424 166 L398 184" />
+  <!-- fixed contacts -->
+
+
+  <!-- vertical down from lower node to voltmeter top -->
+  <path class="w" d="M360 218 V260" />
+
+  <!-- label S -->
+  <text class="ts" x="395" y="140">S</text>
+
+
+  <!-- ===== voltmeter (left-middle branch) ===== -->
+  <circle class="w" cx="360" cy="320" r="44"/>
+  <text class="tslarge" x="343" y="337">V</text>
+  <!-- voltmeter leads -->
+  <path class="w" d="M360 260 V276" />
+  <path class="w" d="M360 364 V430" />
+
+  <!-- ===== capacitor A branch (parallel) ===== -->
+  <!-- branch wire down from top rail -->
+  <path class="w" d="M560 160 V245" />
+  <!-- capacitor plates -->
+  <path class="w" d="M520 245 H600" />
+  <path class="w" d="M520 275 H600" />
+  <!-- branch wire to bottom rail -->
+  <path class="w" d="M560 275 V430" />
+  <text class="ts" x="610" y="285">A</text>
+
+  <!-- ===== capacitor B branch (parallel) ===== -->
+  <path class="w" d="M760 160 V245" />
+  <path class="w" d="M720 245 H800" />
+  <path class="w" d="M720 275 H800" />
+  <path class="w" d="M760 275 V430" />
+  <text class="ts" x="810" y="285">B</text>
+
+  <!-- figure label -->
+  <text class="ts" x="470" y="505">Fig. 1</text>
+</svg>
