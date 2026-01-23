@@ -6,7 +6,18 @@ const mcq = z.object({
   topic: z.string().optional(),
   meta: z.string().optional(),
   marks: z.number().optional(),
-  // ✅ no stem/options/correctId here anymore
+
+  // ✅ NOT required in frontmatter (you parse from body)
+  options: z
+    .array(
+      z.object({
+        id: z.string(),
+        text: z.string(),
+      })
+    )
+    .optional(),
+
+  correctId: z.string().optional(),
 });
 
 const multipart = z.object({

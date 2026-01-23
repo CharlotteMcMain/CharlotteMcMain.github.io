@@ -128,40 +128,6 @@ img { max-width: 100%; height: auto; }
   box-shadow: none;
 }
 
-/* ===== MCQ STYLES ===== */
-.mcq{
-  background:#fff;
-  border:1px solid rgba(0,0,0,.08);
-  border-radius:14px;
-  padding:16px;
-  margin:18px 0;
-}
-.mcq__meta{display:flex; gap:10px; align-items:center; flex-wrap:wrap; opacity:.85; font-size:13px;}
-.mcq__tag{padding:4px 10px; border-radius:999px; border:1px solid rgba(0,0,0,.12);}
-.mcq__stem{margin-top:10px; font-size:16px;}
-.mcq__options{display:grid; gap:10px; margin-top:14px;}
-.mcq__option{
-  text-align:left;
-  border-radius:12px;
-  border:1px solid rgba(0,0,0,.10);
-  padding:12px 12px;
-  background:#fff;
-  display:grid;
-  grid-template-columns:28px 1fr;
-  gap:10px;
-}
-.mcq__option:hover{border-color:rgba(0,0,0,.20);}
-.mcq__optKey{font-weight:700; opacity:.8;}
-.mcq__actions{display:flex; gap:10px; align-items:center; margin-top:14px; flex-wrap:wrap;}
-.mcq__btn{border-radius:10px; padding:10px 12px; border:1px solid rgba(0,0,0,.15); background:#fff;}
-.mcq__btn--ghost{opacity:.8;}
-.mcq__result{font-weight:600;}
-.mcq__explanation{margin-top:14px; padding-top:14px; border-top:1px solid rgba(0,0,0,.08);}
-.mcq__exTitle{font-weight:700; margin-bottom:8px;}
-.is-selected{outline:2px solid rgba(0,0,0,.20);}
-.is-correct{border-color:rgba(0,160,80,.55);}
-.is-wrong{border-color:rgba(220,60,60,.55);}
-
 /* ====== DEFINITION CARD STYLES ====== */
 .definition-card {
   border: 2px solid var(--def-border);
@@ -358,16 +324,7 @@ img { max-width: 100%; height: auto; }
   margin: 10px 0;
 }
 
-/* Optional: status coloring (if you add these classes later) */
-.is-correct {
-  border-color: rgba(0, 160, 80, 0.45) !important;
-  box-shadow: 0 0 0 3px rgba(0, 160, 80, 0.08);
-}
 
-.is-wrong {
-  border-color: rgba(220, 60, 60, 0.45) !important;
-  box-shadow: 0 0 0 3px rgba(220, 60, 60, 0.08);
-}
 
 /* Options container */
 .qopts {
@@ -456,5 +413,137 @@ img { max-width: 100%; height: auto; }
 @media (max-width: 700px) {
   .exam-fig-pair {
     grid-template-columns: 1fr;
+  }
+}
+
+/* =========================
+   MCQ (cohesive with qbox)
+========================= */
+
+/* Let MCQ live inside the existing .qbox card */
+.mcq {
+  margin-top: 12px;
+}
+
+/* Options list same layout style as qopts */
+.mcq-options {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+/* Each option becomes a pill card like .qopt */
+.mcq-option {
+  margin: 0;
+}
+
+/* Hide the native radio but keep it accessible */
+.mcq-radio {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The clickable pill */
+.mcq-label {
+  width: 100%;
+  box-sizing: border-box;
+
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 12px;
+  align-items: center;
+
+  padding: 12px 14px;
+  border-radius: 999px; /* 👈 pill */
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  background: #fff;
+
+  cursor: pointer;
+  transition: transform 0.08s ease, border-color 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+/* Hover matches your button hover language */
+.mcq-label:hover {
+  border-color: rgba(0, 0, 0, 0.18);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+
+/* Letter badge (aligned with your qkey vibe) */
+.mcq-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 28px;
+  height: 28px;
+
+  border-radius: 999px;
+  font-weight: 700;
+  opacity: 0.85;
+
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Text stays on same line; math stays vertically centered */
+.mcq-text {
+  display: flex;
+  align-items: center;
+  line-height: 1.45;
+  font-size: medium;
+}
+
+/* If MD renders <p> inside, remove the extra margins */
+.mcq-text p {
+  margin: 0;
+}
+
+/* Selected state (uses your existing is-selected class idea) */
+.mcq-option.is-selected .mcq-label {
+  border-color: rgba(0, 0, 0, 0.22);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+
+/* Correct/Wrong: reuse your existing color language, but make it look nice on pills */
+.mcq-option.is-correct .mcq-label {
+  border-color: rgba(0, 160, 80, 0.45);
+  box-shadow: 0 0 0 3px rgba(0, 160, 80, 0.10);
+  background: color-mix(in srgb, #ffffff 82%, #baf3cf);
+}
+
+.mcq-option.is-wrong .mcq-label {
+  border-color: rgba(220, 60, 60, 0.45);
+  box-shadow: 0 0 0 3px rgba(220, 60, 60, 0.10);
+  background: color-mix(in srgb, #ffffff 85%, #ffd0d0);
+}
+
+/* Make the letter badge match state */
+.mcq-option.is-correct .mcq-letter {
+  background: rgba(0, 160, 80, 0.18);
+}
+
+.mcq-option.is-wrong .mcq-letter {
+  background: rgba(220, 60, 60, 0.16);
+}
+
+/* Keep qactions as-is; just make the feedback sit nicely */
+.mcq-correct-text {
+  display: inline-flex;
+  align-items: center;
+}
+.mcq-correct-text p {
+  margin: 0;
+}
+
+/* Mobile: slightly tighter pills */
+@media (max-width: 700px) {
+  .mcq-label {
+    border-radius: 16px; /* less extreme pill on small screens */
+    grid-template-columns: 26px 1fr;
+    padding: 12px 12px;
   }
 }
