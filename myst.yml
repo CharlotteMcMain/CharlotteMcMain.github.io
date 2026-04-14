@@ -1,13 +1,15 @@
 version: 1
 
 project:
-  title: My Jupyter Book
+  title: Home
   authors:
-    - Charlotte
+    - Charlotte McMain
 
 site:
   template: book-theme
-  title: My Jupyter Book
+  options:
+    logo_text: Aero Quad
+  title: Home
 
 toc:
   - file: index.md

@@ -1,5 +1,3 @@
-# Welcome
-
-This is my Jupyter Book.
-
-```{tableofcontents}
+---
+title: Aero Quad
+---
