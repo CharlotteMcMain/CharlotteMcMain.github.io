@@ -1,2 +1,12 @@
-.ipynb_checkpoints
-_build
+# Jupyter Book build output
+_build/
+
+# Python
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# Netlify
+.netlify
